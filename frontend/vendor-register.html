@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Registration - KleanMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+  <div class="container" style="padding-top: 48px;">
+    <div class="card">
+      <h2 style="text-align: center; margin-bottom: 24px; color: var(--primary);">Join KleanMark</h2>
+      
+      <form id="registerForm">
+        <div class="form-group">
+          <label class="form-label">Business Name</label>
+          <input type="text" id="businessName" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Owner Name</label>
+          <input type="text" id="ownerName" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="vendor@example.com" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Business Category</label>
+          <select id="category" class="form-control" required>
+            <option value="">Select Category...</option>
+            <option value="Restaurant">Restaurant</option>
+            <option value="Cafe">Cafe / Coffee Shop</option>
+            <option value="Bakery">Bakery / Sweet Shop</option>
+            <option value="Street Food">Street Food</option>
+            <option value="Cloud Kitchen">Cloud Kitchen</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Address</label>
+          <textarea id="address" class="form-control" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 32px;">
+          <label class="form-label">Password</label>
+          <input type="password" id="password" class="form-control" required minlength="6">
+        </div>
+        
+        <button type="submit" class="btn btn-primary" id="submitBtn">Register Business</button>
+      </form>
+      
+      <p style="text-align: center; margin-top: 24px; font-size: 0.875rem;">
+        Already registered? <a href="vendor-login.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Log In</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/vendor-register.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - KleanMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="top-nav">
+    <div class="nav-brand" style="color: var(--text-primary);">KleanMark Control Panel</div>
+    <button class="btn btn-outline" style="width: auto; padding: 6px 12px; font-size: 0.875rem;" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="tab active" data-target="reports">Dashboard</div>
+      <div class="tab" data-target="vendors">Vendors</div>
+      <div class="tab" data-target="fraud">Fraud Flags</div>
+      <div class="tab" data-target="rewards">Global Rewards</div>
+      <div class="tab" data-target="freshness">Freshness Check</div>
+    </div>
+
+    <div class="main-content">
+      
+      <!-- REPORTS -->
+      <div id="reports" class="tab-pane active">
+        <h2>System Overview</h2>
+        <div class="stats-grid" id="statsGrid">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- VENDORS -->
+      <div id="vendors" class="tab-pane">
+        <h2>Vendor Management</h2>
+        <div class="card" style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Business Name</th>
+                <th>Score</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="vendorTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FRAUD FLAGS -->
+      <div id="fraud" class="tab-pane">
+        <h2>Fraud Monitoring</h2>
+        <div class="card" style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Email</th>
+                <th>Vendor</th>
+                <th>Reason</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="fraudTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- REWARDS -->
+      <div id="rewards" class="tab-pane">
+        <h2>Global Reward Tiers</h2>
+        <div class="card">
+          <form id="rewardForm" style="display: flex; gap: 16px; align-items: flex-end; margin-bottom: 24px;">
+            <div class="form-group" style="margin: 0; flex: 1;">
+              <label class="form-label">Reward Name</label>
+              <input type="text" id="rName" class="form-control" placeholder="e.g. Free Coffee" required>
+            </div>
+            <div class="form-group" style="margin: 0; width: 150px;">
+              <label class="form-label">Required Stars</label>
+              <input type="number" id="rStars" class="form-control" required min="1">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: auto;">Add Tier</button>
+          </form>
+          
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Stars Needed</th>
+                <th>Reward Name</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="rewardsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FRESHNESS -->
+      <div id="freshness" class="tab-pane">
+        <h2>Monthly Freshness Execution</h2>
+        <div class="card">
+          <p>Run this on the 5th of every month. It checks all vendors past their renewal deadline (usually the 4th). If they haven't uploaded fresh proof images, their account is flagged as Inactive.</p>
+          <button class="btn btn-primary" style="background: var(--danger); margin-top: 16px;" onclick="runFreshness()">Execute Freshness Check Now</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin-dashboard.js"></script>
+</body>
+</html>

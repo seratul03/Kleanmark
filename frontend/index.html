@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KleanMark - Trust is the New Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
+
+  <header class="hero">
+    <h1>KleanMark</h1>
+    <p>Hygiene Trust Verification & Customer Loyalty in one simple scan.</p>
+    <div class="hero-buttons">
+      <button class="btn btn-primary" onclick="openScanner()">Scan a QR Code</button>
+      <button class="btn btn-outline" onclick="window.location.href='vendor-register.html'">Vendor Sign Up</button>
+      <button class="btn btn-outline" onclick="window.location.href='vendor-login.html'">Vendor Login</button>
+    </div>
+  </header>
+
+  <section class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Restaurants Get Verified</h3>
+          <p>Vendors complete hygiene checklists and upload proof photos to get their KleanMark trust score.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Customers Scan</h3>
+          <p>Diners scan the KleanMark QR code at the table to view the real-time hygiene trust score.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Earn Rewards</h3>
+          <p>Customers check-in securely via OTP to earn loyalty stars for free food and drinks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2026 KleanMark. All rights reserved.</p>
+    <p style="margin-top: 8px; font-size: 0.8rem;"><a href="admin-login.html" style="color: #a0aec0; text-decoration: none;">Admin Login</a></p>
+  </footer>
+
+  <!-- QR Scanner Modal (Mock for MVP) -->
+  <div class="modal-overlay" id="scannerModal">
+    <div class="modal-content">
+      <h3>Scan KleanMark QR</h3>
+      <p>In a real app, this would open the camera. For now, enter a Vendor ID to simulate scanning a QR code.</p>
+      <div class="form-group">
+        <input type="text" id="mockVendorId" class="form-control" placeholder="Enter Vendor ID (UUID)">
+      </div>
+      <button class="btn btn-primary" onclick="simulateScan()">Simulate Scan</button>
+      <button class="btn btn-outline" style="margin-top: 8px;" onclick="closeScanner()">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    function openScanner() {
+      document.getElementById('scannerModal').classList.add('active');
+    }
+    
+    function closeScanner() {
+      document.getElementById('scannerModal').classList.remove('active');
+    }
+    
+    function simulateScan() {
+      const vendorId = document.getElementById('mockVendorId').value.trim();
+      if (!vendorId) {
+        alert("Please enter a Vendor ID");
+        return;
+      }
+      window.location.href = `public-vendor.html?id=${vendorId}`;
+    }
+  </script>
+</body>
+</html>

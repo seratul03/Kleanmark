@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Dashboard - KleanMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/vendor.css">
+</head>
+<body>
+  <div class="top-nav">
+    <div class="nav-brand">KleanMark Vendor</div>
+    <button class="btn btn-outline" style="width: auto; padding: 6px 12px; font-size: 0.875rem;" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="dashboard-container">
+    <div class="sidebar">
+      <div class="tab active" data-target="overview">Overview</div>
+      <div class="tab" data-target="checklist">Hygiene Checklist</div>
+      <div class="tab" data-target="images">Proof Images</div>
+      <div class="tab" data-target="qr">My QR Code</div>
+      <div class="tab" data-target="rewards">Redeem Rewards</div>
+    </div>
+
+    <div class="main-content">
+      <!-- OVERVIEW -->
+      <div id="overview" class="tab-pane active">
+        <div class="card header-card">
+          <h2 id="vendorName">Loading...</h2>
+          <div style="margin-top: 16px; display: flex; gap: 8px;">
+            <span id="badgeVerified" class="badge badge-warning">Pending Approval</span>
+            <span id="badgeActive" class="badge badge-success">Active</span>
+          </div>
+        </div>
+
+        <div class="score-card card">
+          <h3>Trust Score</h3>
+          <div class="score-circle">
+            <span id="trustScore" class="score-value">0</span>
+            <span class="score-max">/100</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div id="checklist" class="tab-pane">
+        <div class="card">
+          <h2>Hygiene Checklist</h2>
+          <p>Answer truthfully. Your score updates immediately.</p>
+          <form id="checklistForm">
+            <!-- Rendered via JS -->
+            <div id="checklistContainer"></div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 24px;">Submit Checklist</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- IMAGES -->
+      <div id="images" class="tab-pane">
+        <div class="card">
+          <h2>Proof Images</h2>
+          <p>Upload clear photos of your premises. Mandatory for trust score.</p>
+          <div id="imageSlotsContainer">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- QR CODE -->
+      <div id="qr" class="tab-pane">
+        <div class="card" style="text-align: center;">
+          <h2>My KleanMark QR</h2>
+          <p>Print and display this QR for customers to scan.</p>
+          
+          <div id="qrContainer" style="margin: 32px 0; min-height: 200px;">
+            <button class="btn btn-primary" onclick="generateQR()" style="max-width: 200px;">Generate QR Code</button>
+          </div>
+          
+          <div style="background: var(--background); padding: 16px; border-radius: 8px;">
+            <p style="margin-bottom: 8px; font-weight: 500;">Developer Action:</p>
+            <button class="btn btn-outline" id="btnPreviewPublic" style="max-width: 300px;">Preview Public Page</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- REWARDS -->
+      <div id="rewards" class="tab-pane">
+        <div class="card">
+          <h2>Redeem Customer Reward</h2>
+          <p>When a customer wants to claim a reward, they must show you their phone. Enter their email address and the reward ID they are claiming.</p>
+          
+          <form id="redeemForm" style="margin-top: 24px;">
+            <div class="form-group">
+              <label class="form-label">Customer Email</label>
+              <input type="email" id="redeemEmail" class="form-control" required placeholder="customer@example.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Reward Tier</label>
+              <select id="redeemTierId" class="form-control" required>
+                <!-- Rendered via JS -->
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Mark as Redeemed</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/vendor-dashboard.js"></script>
+</body>
+</html>

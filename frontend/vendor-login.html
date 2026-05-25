@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Login - KleanMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+  <div class="container" style="padding-top: 64px;">
+    <div class="card">
+      <div style="text-align: center; margin-bottom: 32px;">
+        <h1 style="color: var(--primary);">KleanMark</h1>
+        <p>Vendor Dashboard Login</p>
+      </div>
+
+      <div id="registrationMsg" style="display: none; background: #e6f7ef; color: var(--primary); padding: 12px; border-radius: 8px; margin-bottom: 24px; text-align: center; font-size: 0.875rem; font-weight: 500;">
+        Registration submitted. Please login, but note you will need Admin approval to be fully verified.
+      </div>
+      
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="email" class="form-control" required>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 32px;">
+          <label class="form-label">Password</label>
+          <input type="password" id="password" class="form-control" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" id="loginBtn">Log In</button>
+      </form>
+      
+      <p style="text-align: center; margin-top: 24px; font-size: 0.875rem;">
+        New to KleanMark? <a href="vendor-register.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Register Here</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/vendor-login.js"></script>
+</body>
+</html>

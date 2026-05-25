@@ -1,0 +1,109 @@
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- VENDORS TABLE
+CREATE TABLE vendors (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    business_name TEXT NOT NULL,
+    owner_name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    address TEXT,
+    category TEXT,
+    trust_score NUMERIC(5,2) DEFAULT 0,
+    verified BOOLEAN DEFAULT FALSE,
+    active BOOLEAN DEFAULT TRUE,
+    qr_code TEXT,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    last_checklist_at TIMESTAMPTZ,
+    last_image_at TIMESTAMPTZ,
+    renewal_deadline DATE,
+    renewal_warned BOOLEAN DEFAULT FALSE
+);
+
+-- CHECKLIST ANSWERS TABLE
+CREATE TABLE checklist_answers (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    vendor_id UUID REFERENCES vendors(id) ON DELETE CASCADE,
+    category TEXT NOT NULL,
+    question TEXT NOT NULL,
+    answer BOOLEAN NOT NULL,
+    submitted_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- PROOF IMAGES TABLE
+CREATE TABLE proof_images (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    vendor_id UUID REFERENCES vendors(id) ON DELETE CASCADE,
+    image_type TEXT NOT NULL,
+    image_url TEXT NOT NULL,
+    uploaded_at TIMESTAMPTZ DEFAULT NOW(),
+    is_current BOOLEAN DEFAULT TRUE
+);
+
+-- CUSTOMERS TABLE
+CREATE TABLE customers (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    email TEXT UNIQUE NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- OTP TOKENS TABLE
+CREATE TABLE otp_tokens (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    email TEXT NOT NULL,
+    otp_code TEXT NOT NULL,
+    expires_at TIMESTAMPTZ NOT NULL,
+    used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- VISITS TABLE
+CREATE TABLE visits (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
+    vendor_id UUID REFERENCES vendors(id) ON DELETE CASCADE,
+    visit_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    earned_star BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(customer_id, vendor_id, visit_date)
+);
+
+-- LOYALTY PROGRESS TABLE
+CREATE TABLE loyalty_progress (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
+    vendor_id UUID REFERENCES vendors(id) ON DELETE CASCADE,
+    stars INT DEFAULT 0,
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(customer_id, vendor_id)
+);
+
+-- REWARD TIERS TABLE (Admin-set globally)
+CREATE TABLE reward_tiers (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    required_stars INT NOT NULL,
+    reward_name TEXT NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- REDEMPTIONS TABLE
+CREATE TABLE redemptions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
+    vendor_id UUID REFERENCES vendors(id) ON DELETE CASCADE,
+    reward_tier_id UUID REFERENCES reward_tiers(id) ON DELETE CASCADE,
+    redeemed_at TIMESTAMPTZ DEFAULT NOW(),
+    marked_by_vendor BOOLEAN DEFAULT FALSE
+);
+
+-- FRAUD FLAGS TABLE
+CREATE TABLE fraud_flags (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
+    vendor_id UUID REFERENCES vendors(id) ON DELETE CASCADE,
+    reason TEXT,
+    flagged_at TIMESTAMPTZ DEFAULT NOW(),
+    resolved BOOLEAN DEFAULT FALSE
+);

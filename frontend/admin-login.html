@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - KleanMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+  <div class="container" style="padding-top: 100px;">
+    <div class="card" style="border-top: 4px solid var(--text-primary);">
+      <h2 style="text-align: center; margin-bottom: 24px;">Admin Portal</h2>
+      
+      <form id="adminLoginForm">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" id="username" class="form-control" required>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 32px;">
+          <label class="form-label">Password</label>
+          <input type="password" id="password" class="form-control" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary" style="background-color: var(--text-primary);">Log In</button>
+      </form>
+      
+      <p style="text-align: center; margin-top: 24px; font-size: 0.875rem;">
+        <a href="index.html" style="color: var(--text-secondary); text-decoration: none;">&larr; Back to Home</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin-login.js"></script>
+</body>
+</html>
