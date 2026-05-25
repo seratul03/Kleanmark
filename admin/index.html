@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - KleanMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">KleanMark Admin</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-item active" data-target="dashboard">Dashboard</div>
+        <div class="nav-item" data-target="vendors">Vendors</div>
+        <div class="nav-item" data-target="fraud">Fraud Flags</div>
+        <div class="nav-item" data-target="rewards">Rewards</div>
+        <div class="nav-item" data-target="settings">System</div>
+      </nav>
+      <div class="sidebar-header" style="border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: none; margin-top: auto;">
+        <button class="btn btn-outline" style="width: 100%; color: #fff; border-color: rgba(255, 255, 255, 0.2);" onclick="logout()">Sign Out</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="page-title" id="pageTitle">Dashboard Overview</div>
+      </header>
+
+      <main class="main-content">
+        
+        <!-- DASHBOARD TAB -->
+        <section id="dashboard" class="tab-pane active">
+          <div class="stats-grid" id="statsContainer">
+            <!-- Rendered via JS -->
+            <div class="card stat-card">
+              <div class="stat-title">Total Vendors</div>
+              <div class="stat-value">...</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VENDORS TAB -->
+        <section id="vendors" class="tab-pane">
+          <div class="card" style="padding: 0;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+              <h2 style="font-size: 1.125rem; font-weight: 600;">Vendor Directory</h2>
+              <button class="btn btn-outline" onclick="loadVendors()">Refresh</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Business Name</th>
+                    <th>Category</th>
+                    <th>Trust Score</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="vendorTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- FRAUD FLAGS TAB -->
+        <section id="fraud" class="tab-pane">
+          <div class="card" style="padding: 0;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+              <h2 style="font-size: 1.125rem; font-weight: 600;">Active Fraud Flags</h2>
+              <button class="btn btn-outline" onclick="loadFraudFlags()">Refresh</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Vendor</th>
+                    <th>Reason</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="fraudTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- REWARDS TAB -->
+        <section id="rewards" class="tab-pane">
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Add Global Reward Tier</h2>
+            <form id="rewardForm" style="display: flex; gap: 1rem; align-items: flex-end;">
+              <div class="form-group" style="margin: 0; flex: 1;">
+                <label class="form-label" for="rName">Reward Name</label>
+                <input type="text" id="rName" class="form-control" placeholder="e.g. Free Dessert" required>
+              </div>
+              <div class="form-group" style="margin: 0; width: 150px;">
+                <label class="form-label" for="rStars">Required Stars</label>
+                <input type="number" id="rStars" class="form-control" required min="1">
+              </div>
+              <button type="submit" class="btn btn-primary" style="height: 38px;">Add Tier</button>
+            </form>
+          </div>
+          <!-- Wait, no existing endpoint to LIST rewards in admin.py, I might need to rely on what's available or we can just provide the form -->
+        </section>
+
+        <!-- SYSTEM TAB -->
+        <section id="settings" class="tab-pane">
+          <div class="card">
+            <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Monthly Freshness Check</h2>
+            <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+              Manually trigger the monthly freshness check. This will mark vendors as inactive if they haven't uploaded new proof images within their required timeframe.
+            </p>
+            <button class="btn btn-danger" onclick="triggerFreshnessCheck()" id="freshnessBtn">Execute Freshness Check</button>
+            <p id="freshnessResult" style="margin-top: 1rem; font-size: 0.875rem;"></p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- VENDOR DETAILS MODAL -->
+  <div class="modal-overlay" id="vendorModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="vmTitle">Vendor Details</h3>
+        <button class="modal-close" onclick="closeModal('vendorModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="vmImages" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+          <!-- Images go here -->
+        </div>
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
+        <h4 style="font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Override Trust Score</h4>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <input type="number" id="vmScoreInput" class="form-control" step="0.1" style="width: 100px;">
+          <button class="btn btn-primary" onclick="updateTrustScore()">Save Score</button>
+        </div>
+        <input type="hidden" id="vmVendorId">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('vendorModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
