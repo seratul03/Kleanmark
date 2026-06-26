@@ -39,14 +39,19 @@ async def upload_proof_image(
             "vendor_id": vendor_id,
             "image_type": image_type,
             "image_url": public_url,
-            "is_current": True
+            "is_current": True,
+            "vendor_score": 5,
+            "admin_score": 0,
+            "status": "pending"
         }
         db_res = supabase.table("proof_images").insert(new_image).execute()
         
         # Update last_image_at
         supabase.table("vendors").update({"last_image_at": "now()"}).eq("id", vendor_id).execute()
         
-        # Recalculate trust score (to be implemented)
+        # Recalculate trust score
+        from app.services.trust_engine import calculate_trust_score
+        calculate_trust_score(vendor_id)
         
         return {"message": "Image uploaded successfully", "image_url": public_url, "id": db_res.data[0]["id"]}
         

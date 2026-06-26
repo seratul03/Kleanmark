@@ -34,3 +34,6 @@ class VendorOut(BaseModel):
     last_image_at: Optional[datetime]
     renewal_deadline: Optional[date]
     renewal_warned: bool
+
+class VendorSubscribe(BaseModel):
+    plan_id: str

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from passlib.context import CryptContext
-from app.models.vendor import VendorCreate, VendorLogin, VendorOut, VendorUpdate
+from app.models.vendor import VendorCreate, VendorLogin, VendorOut, VendorUpdate, VendorSubscribe
 from app.database import supabase
 from app.utils.jwt import create_access_token
 from app.dependencies import get_current_vendor
@@ -72,3 +72,42 @@ def update_vendor_profile(vendor_update: VendorUpdate, current_vendor: dict = De
         raise HTTPException(status_code=500, detail="Failed to update vendor")
         
     return response.data[0]
+
+@router.get("/subscriptions/plans")
+def get_vendor_subscription_plans():
+    # Publicly accessible or vendor accessible
+    res = supabase.table("subscription_plans").select("*").eq("active", True).order("price").execute()
+    return res.data
+
+@router.post("/subscriptions/subscribe")
+def vendor_subscribe(data: VendorSubscribe, current_vendor: dict = Depends(get_current_vendor)):
+    vendor_id = current_vendor["id"]
+    
+    # 1. Fetch plan
+    plan_res = supabase.table("subscription_plans").select("*").eq("id", data.plan_id).execute()
+    if not plan_res.data:
+        raise HTTPException(status_code=404, detail="Plan not found")
+        
+    plan = plan_res.data[0]
+    
+    # 2. Insert subscription
+    sub_data = {
+        "vendor_id": vendor_id,
+        "plan_name": plan["name"],
+        "amount": plan["price"],
+        "status": "active"
+    }
+    
+    supabase.table("subscriptions").insert(sub_data).execute()
+    
+    # 3. Update renewal deadline (+30 days)
+    # Using Postgres interval logic or doing it in python. We can let Postgres do it if we use SQL, but via Supabase we pass date.
+    from datetime import datetime, timedelta
+    new_deadline = (datetime.now() + timedelta(days=30)).date().isoformat()
+    
+    supabase.table("vendors").update({
+        "renewal_deadline": new_deadline,
+        "renewal_warned": False
+    }).eq("id", vendor_id).execute()
+    
+    return {"message": f"Successfully subscribed to {plan['name']}", "renewal_deadline": new_deadline}

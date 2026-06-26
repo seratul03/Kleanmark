@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Subscription - KleanMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    body { padding: 40px; background: #f9fafb; }
+    .plans-container { display: flex; gap: 24px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+    .plan-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 32px; width: 300px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .plan-price { font-size: 2.5rem; font-weight: 700; color: var(--primary); margin: 16px 0; }
+    .plan-desc { text-align: left; margin: 24px 0; color: var(--text-secondary); line-height: 1.8; }
+    .plan-desc p { margin: 8px 0; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div style="max-width: 1000px; margin: 0 auto;">
+    <button class="btn btn-outline" style="width: auto;" onclick="window.location.href='vendor-dashboard.html'">← Back to Dashboard</button>
+    
+    <div style="text-align: center; margin-top: 40px;">
+      <h1 style="color: var(--text-primary);">Choose Your Subscription Plan</h1>
+      <p style="color: var(--text-secondary); margin-top: 12px;">Maintain your verified status and access premium tools.</p>
+    </div>
+
+    <div class="plans-container" id="plansContainer">
+      <p>Loading plans from the server...</p>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/vendor-subscription.js"></script>
+</body>
+</html>

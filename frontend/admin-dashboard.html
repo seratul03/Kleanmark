@@ -20,6 +20,8 @@
       <div class="tab" data-target="vendors">Vendors</div>
       <div class="tab" data-target="fraud">Fraud Flags</div>
       <div class="tab" data-target="rewards">Global Rewards</div>
+      <div class="tab" data-target="subscriptions">Subscriptions</div>
+      <div class="tab" data-target="images">Image Review</div>
       <div class="tab" data-target="freshness">Freshness Check</div>
     </div>
 
@@ -99,6 +101,49 @@
               </tr>
             </thead>
             <tbody id="rewardsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SUBSCRIPTIONS -->
+      <div id="subscriptions" class="tab-pane">
+        <h2>Subscription Plans</h2>
+        <div class="card" style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Plan Name</th>
+                <th>Price</th>
+                <th>Description 1</th>
+                <th>Description 2</th>
+                <th>Description 3</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="subscriptionsTableBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- IMAGE REVIEW -->
+      <div id="images" class="tab-pane">
+        <h2>Pending Image Reviews</h2>
+        <div class="card" style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Vendor</th>
+                <th>Image Type</th>
+                <th>Preview</th>
+                <th>Score (0-5)</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="imagesTableBody">
               <!-- Rendered via JS -->
             </tbody>
           </table>

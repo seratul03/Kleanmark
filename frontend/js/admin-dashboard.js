@@ -16,6 +16,8 @@ async function loadDashboard() {
   loadVendors();
   loadFraud();
   loadRewards();
+  loadSubscriptions();
+  loadPendingImages();
 }
 
 async function loadSummary() {
@@ -154,5 +156,80 @@ document.getElementById('rewardForm').addEventListener('submit', async (e) => {
     // loadRewards(); // reload
   } catch (e) {}
 });
+
+// -- SUBSCRIPTIONS --
+async function loadSubscriptions() {
+  try {
+    const plans = await fetchAPI('/admin/subscriptions/plans');
+    const tbody = document.getElementById('subscriptionsTableBody');
+    tbody.innerHTML = '';
+    
+    plans.forEach(p => {
+      tbody.innerHTML += `
+        <tr>
+          <td><strong>${p.name}</strong></td>
+          <td><input type="number" id="price_${p.id}" value="${p.price}" class="form-control" style="width: 80px;"></td>
+          <td><input type="text" id="desc1_${p.id}" value="${p.description_1 || ''}" class="form-control"></td>
+          <td><input type="text" id="desc2_${p.id}" value="${p.description_2 || ''}" class="form-control"></td>
+          <td><input type="text" id="desc3_${p.id}" value="${p.description_3 || ''}" class="form-control"></td>
+          <td>
+            <button class="btn btn-primary" style="padding: 4px 8px; font-size: 12px; width: auto;" onclick="saveSubscription('${p.id}')">Save</button>
+          </td>
+        </tr>
+      `;
+    });
+  } catch (e) {}
+}
+
+async function saveSubscription(id) {
+  const payload = {
+    price: parseFloat(document.getElementById(`price_${id}`).value),
+    description_1: document.getElementById(`desc1_${id}`).value,
+    description_2: document.getElementById(`desc2_${id}`).value,
+    description_3: document.getElementById(`desc3_${id}`).value,
+  };
+  try {
+    await fetchAPI(`/admin/subscriptions/plans/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
+    showToast('Subscription updated', 'success');
+  } catch(e) {}
+}
+
+// -- IMAGE REVIEW --
+async function loadPendingImages() {
+  try {
+    const images = await fetchAPI('/admin/images/pending');
+    const tbody = document.getElementById('imagesTableBody');
+    tbody.innerHTML = '';
+    
+    images.forEach(img => {
+      const vendorName = img.vendors ? img.vendors.business_name : 'Unknown';
+      tbody.innerHTML += `
+        <tr>
+          <td><strong>${vendorName}</strong></td>
+          <td>${img.image_type}</td>
+          <td><a href="${img.image_url}" target="_blank"><img src="${img.image_url}" style="height: 60px; border-radius: 4px;"></a></td>
+          <td><input type="number" id="score_${img.id}" min="0" max="5" value="0" class="form-control" style="width: 60px;"></td>
+          <td>
+            <button class="btn btn-primary" style="padding: 4px 8px; font-size: 12px; width: auto;" onclick="scoreImage('${img.id}')">Submit Score</button>
+          </td>
+        </tr>
+      `;
+    });
+  } catch (e) {}
+}
+
+async function scoreImage(id) {
+  const scoreVal = parseInt(document.getElementById(`score_${id}`).value);
+  if(isNaN(scoreVal) || scoreVal < 0 || scoreVal > 5) {
+    alert("Score must be between 0 and 5");
+    return;
+  }
+  
+  try {
+    const res = await fetchAPI(`/admin/images/${id}/score`, { method: 'PUT', body: JSON.stringify({ score: scoreVal }) });
+    showToast(`Image scored! New Trust Score: ${res.new_trust_score}`, 'success');
+    loadPendingImages();
+  } catch(e) {}
+}
 
 loadDashboard();

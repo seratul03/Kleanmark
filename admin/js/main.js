@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (rewardForm) {
     rewardForm.addEventListener('submit', handleAddRewardTier);
   }
+
+  const addVendorForm = document.getElementById('addVendorForm');
+  if (addVendorForm) {
+    addVendorForm.addEventListener('submit', addVendorSubmit);
+  }
 });
 
 // --- Tabs Logic ---
@@ -34,7 +39,15 @@ function initTabs() {
       // Load data based on tab
       if (targetId === 'dashboard') loadDashboardStats();
       if (targetId === 'vendors') loadVendors();
+      if (targetId === 'verifications') loadVerifications();
       if (targetId === 'fraud') loadFraudFlags();
+      if (targetId === 'rewards') loadRewards();
+      if (targetId === 'subscriptions') {
+        loadSubscriptions();
+        loadSubscribers();
+      }
+      if (targetId === 'images') loadPendingImages();
+      if (targetId === 'logs') loadLogs();
     });
   });
 }
@@ -42,9 +55,13 @@ function initTabs() {
 // --- Dashboard Stats ---
 async function loadDashboardStats() {
   try {
-    const res = await fetch(`${API_BASE_URL}/admin/reports/summary`, {
+    const res = await fetch(`${API_BASE_URL}/admin/dashboard/analytics`, {
       headers: getAuthHeaders()
     });
+    if (res.status === 401 || res.status === 403) {
+      logout();
+      return;
+    }
     if (!res.ok) throw new Error('Failed to fetch stats');
     const data = await res.json();
 
@@ -55,12 +72,20 @@ async function loadDashboardStats() {
         <div class="stat-value">${data.total_vendors}</div>
       </div>
       <div class="card stat-card">
-        <div class="stat-title">Avg Trust Score</div>
-        <div class="stat-value">${data.avg_trust_score.toFixed(1)}</div>
+        <div class="stat-title">Active Plans</div>
+        <div class="stat-value">${data.active_plans_count}</div>
       </div>
       <div class="card stat-card">
-        <div class="stat-title">Total Visits</div>
-        <div class="stat-value">${data.total_visits}</div>
+        <div class="stat-title">Monthly Revenue</div>
+        <div class="stat-value">₹${data.monthly_revenue.toFixed(2)}</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-title">Verification Queue</div>
+        <div class="stat-value">${data.verification_queue_count}</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-title">Avg Trust Score</div>
+        <div class="stat-value">${data.avg_trust_score.toFixed(1)}</div>
       </div>
       <div class="card stat-card">
         <div class="stat-title">Active Fraud Flags</div>
@@ -79,6 +104,10 @@ async function loadVendors() {
   
   try {
     const res = await fetch(`${API_BASE_URL}/admin/vendors`, { headers: getAuthHeaders() });
+    if (res.status === 401 || res.status === 403) {
+      logout();
+      return;
+    }
     if (!res.ok) throw new Error('Failed to fetch vendors');
     const vendors = await res.json();
 
@@ -108,8 +137,8 @@ async function loadVendors() {
         <td>
           <div class="table-actions">
             ${!v.verified ? `<button class="btn btn-sm btn-success" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="approveVendor('${v.id}')">Approve</button>` : ''}
-            ${v.active ? `<button class="btn btn-sm btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="deactivateVendor('${v.id}')">Dismiss</button>` : ''}
-            <button class="btn btn-sm btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="openVendorModal('${v.id}', '${v.business_name}', ${v.trust_score})">View Details</button>
+            ${v.active ? `<button class="btn btn-sm btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="openSuspendModal('${v.id}')">Suspend</button>` : `<button class="btn btn-sm btn-success" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="reactivateVendor('${v.id}')">Activate</button>`}
+            <button class="btn btn-sm btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="openVendorModal('${v.id}', '${v.business_name}', ${v.trust_score})">Details</button>
           </div>
         </td>
       `;
@@ -131,13 +160,82 @@ async function approveVendor(id) {
   }
 }
 
-async function deactivateVendor(id) {
-  if (!confirm('Are you sure you want to dismiss (deactivate) this vendor?')) return;
+async function reactivateVendor(id) {
+  if (!confirm('Reactivate this vendor?')) return;
   try {
-    await fetch(`${API_BASE_URL}/admin/vendors/${id}/deactivate`, { method: 'PUT', headers: getAuthHeaders() });
+    await fetch(`${API_BASE_URL}/admin/vendors/${id}`, { 
+      method: 'PUT', 
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ active: true })
+    });
     loadVendors();
   } catch (err) {
-    alert('Failed to deactivate vendor');
+    alert('Failed to reactivate vendor');
+  }
+}
+
+function openAddVendorModal() {
+  document.getElementById('addVendorForm').reset();
+  document.getElementById('addVendorModal').classList.add('active');
+}
+
+async function addVendorSubmit(e) {
+  e.preventDefault();
+  const payload = {
+    business_name: document.getElementById('avBusinessName').value,
+    owner_name: document.getElementById('avOwnerName').value,
+    email: document.getElementById('avEmail').value,
+    password: document.getElementById('avPassword').value,
+    category: document.getElementById('avCategory').value
+  };
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/vendors`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      alert('Vendor created');
+      closeModal('addVendorModal');
+      loadVendors();
+    } else {
+      throw new Error();
+    }
+  } catch (err) {
+    alert('Failed to create vendor');
+  }
+}
+
+function openSuspendModal(id) {
+  document.getElementById('svId').value = id;
+  document.getElementById('svReason').value = '';
+  document.getElementById('suspendVendorModal').classList.add('active');
+}
+
+async function suspendVendorSubmit() {
+  const id = document.getElementById('svId').value;
+  const reason = document.getElementById('svReason').value;
+  if (!reason) {
+    alert('Please provide a reason');
+    return;
+  }
+  
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/vendors/${id}/suspend`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ reason })
+    });
+    if (res.ok) {
+      alert('Vendor suspended');
+      closeModal('suspendVendorModal');
+      loadVendors();
+    } else {
+      throw new Error();
+    }
+  } catch (err) {
+    alert('Failed to suspend vendor');
   }
 }
 
@@ -194,6 +292,41 @@ async function updateTrustScore() {
     }
   } catch (err) {
     alert('Failed to update trust score');
+  }
+}
+
+// --- Verifications Queue ---
+async function loadVerifications() {
+  const tbody = document.getElementById('verificationTableBody');
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Loading...</td></tr>';
+  
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/verifications/pending`, { headers: getAuthHeaders() });
+    if (!res.ok) throw new Error();
+    const vendors = await res.json();
+
+    tbody.innerHTML = '';
+    if (vendors.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No pending verifications.</td></tr>';
+      return;
+    }
+
+    vendors.forEach(v => {
+      const checklistCount = v.checklist ? v.checklist.length : 0;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><div style="font-weight: 500;">${v.business_name}</div><div style="font-size:0.75rem; color: var(--text-muted);">${v.owner_name}</div></td>
+        <td>${v.category || 'N/A'}</td>
+        <td>${checklistCount} answers</td>
+        <td>
+          <button class="btn btn-sm btn-success" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="approveVendor('${v.id}'); loadVerifications()">Approve</button>
+          <button class="btn btn-sm btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="openVendorModal('${v.id}', '${v.business_name}', ${v.trust_score})">View Images</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: var(--danger);">Error loading queue</td></tr>';
   }
 }
 
@@ -269,6 +402,205 @@ async function handleAddRewardTier(e) {
     }
   } catch (err) {
     alert('Failed to add reward tier');
+  }
+}
+
+async function loadRewards() {
+  const tbody = document.getElementById('rewardTableBody');
+  tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Loading...</td></tr>';
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/rewards/tiers`, { headers: getAuthHeaders() });
+    if (!res.ok) throw new Error();
+    const tiers = await res.json();
+    tbody.innerHTML = '';
+    if (tiers.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No reward tiers found.</td></tr>';
+      return;
+    }
+    tiers.forEach(t => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${t.reward_name}</td>
+        <td>${t.required_stars}</td>
+        <td>
+          <button class="btn btn-sm btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="deleteReward('${t.id}')">Delete</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch(err) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--danger)">Error loading rewards</td></tr>';
+  }
+}
+
+async function deleteReward(id) {
+  if(!confirm('Delete this reward tier?')) return;
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/rewards/tiers/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
+    if(res.ok) loadRewards();
+  } catch(err) {
+    alert('Failed to delete');
+  }
+}
+
+// --- Subscriptions ---
+async function loadSubscribers() {
+  const tbody = document.getElementById('subscribersTableBody');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Loading...</td></tr>';
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/subscriptions/active`, { headers: getAuthHeaders() });
+    if (!res.ok) throw new Error();
+    const subs = await res.json();
+    tbody.innerHTML = '';
+    if(subs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No active subscriptions found.</td></tr>';
+        return;
+    }
+    subs.forEach(s => {
+      const vendorName = s.vendors ? s.vendors.business_name : 'Unknown';
+      const email = s.vendors ? s.vendors.email : '';
+      tbody.innerHTML += `
+        <tr>
+          <td><strong>${vendorName}</strong></td>
+          <td>${email}</td>
+          <td><span class="badge badge-success">${s.plan_name}</span></td>
+          <td>₹${s.amount}</td>
+          <td>${new Date(s.start_date).toLocaleDateString()}</td>
+          <td>
+            ${email ? `<a href="mailto:${email}" class="btn btn-sm btn-primary">Email Vendor</a>` : ''}
+          </td>
+        </tr>
+      `;
+    });
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--danger)">Error loading subscribers</td></tr>';
+  }
+}
+
+async function loadSubscriptions() {
+  const tbody = document.getElementById('subscriptionsTableBody');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Loading...</td></tr>';
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/subscriptions/plans`, { headers: getAuthHeaders() });
+    if (!res.ok) throw new Error();
+    const plans = await res.json();
+    tbody.innerHTML = '';
+    plans.forEach(p => {
+      tbody.innerHTML += `
+        <tr>
+          <td><strong>${p.name}</strong></td>
+          <td><input type="number" id="price_${p.id}" value="${p.price}" class="form-control" style="width: 80px;"></td>
+          <td><input type="text" id="desc1_${p.id}" value="${p.description_1 || ''}" class="form-control"></td>
+          <td><input type="text" id="desc2_${p.id}" value="${p.description_2 || ''}" class="form-control"></td>
+          <td><input type="text" id="desc3_${p.id}" value="${p.description_3 || ''}" class="form-control"></td>
+          <td>
+            <button class="btn btn-sm btn-primary" onclick="saveSubscription('${p.id}')">Save</button>
+          </td>
+        </tr>
+      `;
+    });
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--danger)">Error loading plans</td></tr>';
+  }
+}
+
+async function saveSubscription(id) {
+  const payload = {
+    price: parseFloat(document.getElementById(`price_${id}`).value),
+    description_1: document.getElementById(`desc1_${id}`).value,
+    description_2: document.getElementById(`desc2_${id}`).value,
+    description_3: document.getElementById(`desc3_${id}`).value,
+  };
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/subscriptions/plans/${id}`, { 
+      method: 'PUT', 
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload) 
+    });
+    if(res.ok) alert('Subscription updated successfully');
+  } catch(e) {
+    alert('Failed to update subscription');
+  }
+}
+
+// --- Image Review ---
+async function loadPendingImages() {
+  const tbody = document.getElementById('imagesTableBody');
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>';
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/images/pending`, { headers: getAuthHeaders() });
+    if (!res.ok) throw new Error();
+    const images = await res.json();
+    tbody.innerHTML = '';
+    if(images.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No pending images.</td></tr>';
+        return;
+    }
+    images.forEach(img => {
+      const vendorName = img.vendors ? img.vendors.business_name : 'Unknown';
+      tbody.innerHTML += `
+        <tr>
+          <td><strong>${vendorName}</strong></td>
+          <td>${img.image_type}</td>
+          <td><a href="${img.image_url}" target="_blank"><img src="${img.image_url}" style="height: 60px; border-radius: 4px; object-fit: contain;"></a></td>
+          <td><input type="number" id="score_${img.id}" min="0" max="5" value="0" class="form-control" style="width: 60px;"></td>
+          <td>
+            <button class="btn btn-sm btn-primary" onclick="scoreImage('${img.id}')">Submit Score</button>
+          </td>
+        </tr>
+      `;
+    });
+  } catch (err) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--danger)">Error loading images</td></tr>';
+  }
+}
+
+async function scoreImage(id) {
+  const scoreVal = parseInt(document.getElementById(`score_${id}`).value);
+  if(isNaN(scoreVal) || scoreVal < 0 || scoreVal > 5) {
+    alert("Score must be between 0 and 5");
+    return;
+  }
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/images/${id}/score`, { 
+      method: 'PUT', 
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ score: scoreVal }) 
+    });
+    if(res.ok) {
+        alert('Image scored!');
+        loadPendingImages();
+    }
+  } catch(e) {
+      alert('Failed to score image');
+  }
+}
+
+// --- Logs ---
+async function loadLogs() {
+  const tbody = document.getElementById('logsTableBody');
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Loading...</td></tr>';
+  try {
+    const res = await fetch(`${API_BASE_URL}/admin/logs`, { headers: getAuthHeaders() });
+    if (!res.ok) throw new Error();
+    const logs = await res.json();
+    tbody.innerHTML = '';
+    if (logs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No logs found.</td></tr>';
+      return;
+    }
+    logs.forEach(l => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${new Date(l.created_at).toLocaleString()}</td>
+        <td>${l.admin_username}</td>
+        <td><span class="badge badge-neutral">${l.action}</span></td>
+        <td style="font-size: 0.875rem;">${l.details || ''} <br><small style="color:var(--text-muted)">${l.target_id || ''}</small></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch(err) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--danger)">Error loading logs</td></tr>';
   }
 }
 

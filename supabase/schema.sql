@@ -38,7 +38,22 @@ CREATE TABLE proof_images (
     image_type TEXT NOT NULL,
     image_url TEXT NOT NULL,
     uploaded_at TIMESTAMPTZ DEFAULT NOW(),
-    is_current BOOLEAN DEFAULT TRUE
+    is_current BOOLEAN DEFAULT TRUE,
+    vendor_score INT DEFAULT 5,
+    admin_score INT DEFAULT 0,
+    status TEXT DEFAULT 'pending'
+);
+
+-- SUBSCRIPTION PLANS TABLE
+CREATE TABLE subscription_plans (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name TEXT NOT NULL UNIQUE,
+    price NUMERIC(10,2) NOT NULL,
+    description_1 TEXT,
+    description_2 TEXT,
+    description_3 TEXT,
+    active BOOLEAN DEFAULT TRUE,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- CUSTOMERS TABLE
@@ -106,4 +121,25 @@ CREATE TABLE fraud_flags (
     reason TEXT,
     flagged_at TIMESTAMPTZ DEFAULT NOW(),
     resolved BOOLEAN DEFAULT FALSE
+);
+
+-- SUBSCRIPTIONS TABLE
+CREATE TABLE subscriptions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    vendor_id UUID REFERENCES vendors(id) ON DELETE CASCADE,
+    plan_name TEXT NOT NULL,
+    amount NUMERIC(10,2) NOT NULL DEFAULT 0.00,
+    status TEXT NOT NULL DEFAULT 'active',
+    start_date TIMESTAMPTZ DEFAULT NOW(),
+    end_date TIMESTAMPTZ
+);
+
+-- ADMIN LOGS TABLE
+CREATE TABLE admin_logs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    admin_username TEXT NOT NULL,
+    action TEXT NOT NULL,
+    target_id UUID,
+    details TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );

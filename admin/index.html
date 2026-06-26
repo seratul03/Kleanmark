@@ -20,8 +20,12 @@
       <nav class="sidebar-nav">
         <div class="nav-item active" data-target="dashboard">Dashboard</div>
         <div class="nav-item" data-target="vendors">Vendors</div>
+        <div class="nav-item" data-target="verifications">Verification Queue</div>
         <div class="nav-item" data-target="fraud">Fraud Flags</div>
         <div class="nav-item" data-target="rewards">Rewards</div>
+        <div class="nav-item" data-target="subscriptions">Subscriptions</div>
+        <div class="nav-item" data-target="images">Image Review</div>
+        <div class="nav-item" data-target="logs">Activity Logs</div>
         <div class="nav-item" data-target="settings">System</div>
       </nav>
       <div class="sidebar-header" style="border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: none; margin-top: auto;">
@@ -53,7 +57,10 @@
           <div class="card" style="padding: 0;">
             <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
               <h2 style="font-size: 1.125rem; font-weight: 600;">Vendor Directory</h2>
-              <button class="btn btn-outline" onclick="loadVendors()">Refresh</button>
+              <div>
+                <button class="btn btn-primary" onclick="openAddVendorModal()">Add Vendor</button>
+                <button class="btn btn-outline" onclick="loadVendors()">Refresh</button>
+              </div>
             </div>
             <div class="table-responsive">
               <table class="data-table">
@@ -67,6 +74,31 @@
                   </tr>
                 </thead>
                 <tbody id="vendorTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VERIFICATION QUEUE TAB -->
+        <section id="verifications" class="tab-pane">
+          <div class="card" style="padding: 0;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+              <h2 style="font-size: 1.125rem; font-weight: 600;">Verification Queue</h2>
+              <button class="btn btn-outline" onclick="loadVerifications()">Refresh</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Vendor Name</th>
+                    <th>Category</th>
+                    <th>Checklists Submitted</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="verificationTableBody">
                   <!-- Rendered via JS -->
                 </tbody>
               </table>
@@ -116,7 +148,123 @@
               <button type="submit" class="btn btn-primary" style="height: 38px;">Add Tier</button>
             </form>
           </div>
-          <!-- Wait, no existing endpoint to LIST rewards in admin.py, I might need to rely on what's available or we can just provide the form -->
+          <div class="card" style="padding: 0;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Reward Name</th>
+                    <th>Required Stars</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="rewardTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SUBSCRIPTIONS TAB -->
+        <section id="subscriptions" class="tab-pane">
+          <!-- Active Subscribers -->
+          <div class="card" style="padding: 0; margin-bottom: 2rem;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+              <h2 style="font-size: 1.125rem; font-weight: 600;">Active Subscribers</h2>
+              <button class="btn btn-outline" onclick="loadSubscribers()">Refresh</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Vendor Name</th>
+                    <th>Email</th>
+                    <th>Plan</th>
+                    <th>Amount</th>
+                    <th>Start Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="subscribersTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color);">
+              <h2 style="font-size: 1.125rem; font-weight: 600;">Subscription Plans (Pricing)</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Plan Name</th>
+                    <th>Price</th>
+                    <th>Description 1</th>
+                    <th>Description 2</th>
+                    <th>Description 3</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="subscriptionsTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- IMAGE REVIEW TAB -->
+        <section id="images" class="tab-pane">
+          <div class="card" style="padding: 0;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color);">
+              <h2 style="font-size: 1.125rem; font-weight: 600;">Pending Image Reviews</h2>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Vendor</th>
+                    <th>Image Type</th>
+                    <th>Preview</th>
+                    <th>Score (0-5)</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="imagesTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- LOGS TAB -->
+        <section id="logs" class="tab-pane">
+          <div class="card" style="padding: 0;">
+            <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+              <h2 style="font-size: 1.125rem; font-weight: 600;">Admin Activity Logs</h2>
+              <button class="btn btn-outline" onclick="loadLogs()">Refresh</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Admin</th>
+                    <th>Action</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody id="logsTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
         </section>
 
         <!-- SYSTEM TAB -->
@@ -156,6 +304,66 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeModal('vendorModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD/EDIT VENDOR MODAL -->
+  <div class="modal-overlay" id="addVendorModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="addVendorTitle">Add New Vendor</h3>
+        <button class="modal-close" onclick="closeModal('addVendorModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="addVendorForm">
+          <input type="hidden" id="avId">
+          <div class="form-group">
+            <label class="form-label" for="avBusinessName">Business Name</label>
+            <input type="text" id="avBusinessName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="avOwnerName">Owner Name</label>
+            <input type="text" id="avOwnerName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="avEmail">Email</label>
+            <input type="email" id="avEmail" class="form-control" required>
+          </div>
+          <div class="form-group" id="avPasswordGroup">
+            <label class="form-label" for="avPassword">Password</label>
+            <input type="password" id="avPassword" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="avCategory">Category</label>
+            <select id="avCategory" class="form-control">
+              <option value="Restaurant">Restaurant</option>
+              <option value="Cafe">Cafe</option>
+              <option value="Food Truck">Food Truck</option>
+              <option value="Cloud Kitchen">Cloud Kitchen</option>
+              <option value="Bakery">Bakery</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">Save Vendor</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUSPEND VENDOR MODAL -->
+  <div class="modal-overlay" id="suspendVendorModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Suspend Vendor</h3>
+        <button class="modal-close" onclick="closeModal('suspendVendorModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="svId">
+        <div class="form-group">
+          <label class="form-label" for="svReason">Reason for suspension</label>
+          <textarea id="svReason" class="form-control" rows="3" required></textarea>
+        </div>
+        <button class="btn btn-danger" onclick="suspendVendorSubmit()" style="width:100%">Confirm Suspension</button>
       </div>
     </div>
   </div>
