@@ -17,6 +17,7 @@ class VendorLogin(BaseModel):
 class VendorUpdate(BaseModel):
     address: Optional[str] = None
     category: Optional[str] = None
+    staff_pin: Optional[str] = None
 
 class VendorOut(BaseModel):
     id: str
@@ -34,6 +35,7 @@ class VendorOut(BaseModel):
     last_image_at: Optional[datetime]
     renewal_deadline: Optional[date]
     renewal_warned: bool
+    staff_pin: Optional[str] = None
 
 class VendorSubscribe(BaseModel):
     plan_id: str

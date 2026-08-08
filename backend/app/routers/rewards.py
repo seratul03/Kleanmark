@@ -1,7 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.models.reward import RewardRedeemRequest
 from app.database import supabase
-from app.dependencies import get_current_vendor
+from app.dependencies import get_current_vendor, get_current_customer
+from pydantic import BaseModel
+
+class RedeemPinRequest(BaseModel):
+    vendor_id: str
+    reward_tier_id: str
+    staff_pin: str
 
 router = APIRouter(prefix="/rewards", tags=["rewards"])
 
@@ -52,3 +58,45 @@ def redeem_reward(req: RewardRedeemRequest, current_vendor: dict = Depends(get_c
     }).execute()
     
     return {"message": "Reward redeemed successfully", "remaining_stars": new_stars}
+
+@router.post("/redeem-pin")
+def redeem_reward_via_pin(req: RedeemPinRequest, current_customer: dict = Depends(get_current_customer)):
+    customer_id = current_customer["id"]
+    vendor_id = req.vendor_id
+    
+    # 1. Validate Staff PIN
+    vendor_res = supabase.table("vendors").select("staff_pin").eq("id", vendor_id).execute()
+    if not vendor_res.data:
+        raise HTTPException(status_code=404, detail="Vendor not found")
+        
+    vendor_pin = vendor_res.data[0].get("staff_pin")
+    if not vendor_pin or vendor_pin != req.staff_pin:
+        raise HTTPException(status_code=401, detail="Invalid Staff PIN or PIN not set by vendor")
+        
+    # 2. Get reward tier
+    tier_res = supabase.table("reward_tiers").select("*").eq("id", req.reward_tier_id).execute()
+    if not tier_res.data:
+        raise HTTPException(status_code=404, detail="Reward tier not found")
+    tier = tier_res.data[0]
+    
+    # 3. Get customer stars
+    prog_res = supabase.table("loyalty_progress").select("*").eq("customer_id", customer_id).eq("vendor_id", vendor_id).execute()
+    if not prog_res.data:
+        raise HTTPException(status_code=400, detail="Customer has no stars at this vendor")
+        
+    current_stars = prog_res.data[0]["stars"]
+    
+    if current_stars < tier["required_stars"]:
+        raise HTTPException(status_code=400, detail="Not enough stars for this reward")
+        
+    new_stars = current_stars - tier["required_stars"]
+    supabase.table("loyalty_progress").update({"stars": new_stars}).eq("id", prog_res.data[0]["id"]).execute()
+    
+    supabase.table("redemptions").insert({
+        "customer_id": customer_id,
+        "vendor_id": vendor_id,
+        "reward_tier_id": tier["id"],
+        "marked_by_vendor": True
+    }).execute()
+    
+    return {"message": "Reward redeemed successfully via Staff PIN", "remaining_stars": new_stars}

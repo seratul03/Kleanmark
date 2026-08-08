@@ -111,3 +111,24 @@ def vendor_subscribe(data: VendorSubscribe, current_vendor: dict = Depends(get_c
     }).eq("id", vendor_id).execute()
     
     return {"message": f"Successfully subscribed to {plan['name']}", "renewal_deadline": new_deadline}
+
+@router.get("/analytics")
+def get_vendor_analytics(current_vendor: dict = Depends(get_current_vendor)):
+    vendor_id = current_vendor["id"]
+    
+    # Total scans
+    scans = current_vendor.get("total_scans") or 0
+    
+    # Total checkins (visits)
+    visits_res = supabase.table("visits").select("id").eq("vendor_id", vendor_id).execute()
+    checkins = len(visits_res.data) if visits_res.data else 0
+    
+    conversion_rate = 0
+    if scans > 0:
+        conversion_rate = round((checkins / scans) * 100, 1)
+        
+    return {
+        "total_scans": scans,
+        "total_checkins": checkins,
+        "conversion_rate": conversion_rate
+    }

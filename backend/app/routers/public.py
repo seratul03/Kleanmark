@@ -6,12 +6,16 @@ router = APIRouter(prefix="/public", tags=["public"])
 @router.get("/vendor/{vendor_id}")
 def get_public_vendor(vendor_id: str):
     # Get vendor basic info
-    vendor_res = supabase.table("vendors").select("business_name, category, address, trust_score, verified, active, last_checklist_at, last_image_at").eq("id", vendor_id).execute()
+    vendor_res = supabase.table("vendors").select("business_name, category, address, trust_score, verified, active, last_checklist_at, last_image_at, total_scans").eq("id", vendor_id).execute()
     
     if not vendor_res.data:
         raise HTTPException(status_code=404, detail="Vendor not found")
         
     vendor = vendor_res.data[0]
+    
+    # Increment scans
+    new_scans = (vendor.get("total_scans") or 0) + 1
+    supabase.table("vendors").update({"total_scans": new_scans}).eq("id", vendor_id).execute()
     
     # Get checklist summary
     checklist_res = supabase.table("checklist_answers").select("category, answer").eq("vendor_id", vendor_id).execute()
