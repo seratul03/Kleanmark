@@ -58,7 +58,9 @@
           <!-- Rendered via JS -->
         </div>
 
-        <button class="btn btn-primary" id="btnCheckIn" onclick="openCheckInModal()">Check In Now</button>
+        <div id="unlockedRewardsContainer" style="margin-top: 16px;">
+          <!-- Rendered via JS -->
+        </div>
       </div>
 
       <!-- Proof Images -->
@@ -73,7 +75,22 @@
         <!-- Rendered via JS -->
       </div>
 
+      <!-- Anonymous Feedback -->
+      <div class="feedback-section">
+        <h3>Help Us Improve</h3>
+        <p style="font-size: 0.875rem;">Your anonymous feedback goes directly to management.</p>
+        <div class="form-group">
+          <textarea id="feedbackText" class="form-control" rows="3" placeholder="Tell us about your experience..." style="resize: vertical;"></textarea>
+        </div>
+        <button class="btn btn-outline" onclick="submitFeedback()">Submit Feedback</button>
+      </div>
+
     </div>
+  </div>
+
+  <!-- Floating Action Bar -->
+  <div class="floating-action-bar">
+    <button class="btn btn-primary" id="btnCheckInFloating" onclick="openCheckInModal()">Check In Now</button>
   </div>
 
   <!-- Check In / OTP Modal -->
@@ -99,6 +116,19 @@
         <button class="btn btn-outline" style="margin-top: 8px;" onclick="closeCheckInModal()">Cancel</button>
       </div>
 
+    </div>
+  </div>
+
+  <!-- Staff PIN Modal -->
+  <div class="modal-overlay" id="pinModal">
+    <div class="modal-content">
+      <h3>Vendor Verification</h3>
+      <p>Hand your phone to the staff to enter their PIN and redeem this reward.</p>
+      <div class="form-group">
+        <input type="password" id="staffPinInput" class="form-control" placeholder="Staff PIN">
+      </div>
+      <button class="btn btn-primary" onclick="submitStaffPin()">Redeem Reward</button>
+      <button class="btn btn-outline" style="margin-top: 8px;" onclick="closePinModal()">Cancel</button>
     </div>
   </div>
 

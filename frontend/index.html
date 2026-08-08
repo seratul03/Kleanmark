@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KleanMark - Trust is the New Menu</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
 
   <header class="hero">
-    <h1>KleanMark</h1>
+    <img src="assets/images/Logo.svg" alt="KleanMark Logo" class="brand-logo">
     <p>Hygiene Trust Verification & Customer Loyalty in one simple scan.</p>
     <div class="hero-buttons">
       <button class="btn btn-primary" onclick="openScanner()">Scan a QR Code</button>
@@ -21,27 +22,45 @@
   </header>
 
   <section class="how-it-works">
-    <h2>How It Works</h2>
+    <h2 class="fade-up">How It Works</h2>
     <div class="steps">
-      <div class="step">
+      <div class="step fade-up">
         <div class="step-number">1</div>
         <div class="step-content">
           <h3>Restaurants Get Verified</h3>
           <p>Vendors complete hygiene checklists and upload proof photos to get their KleanMark trust score.</p>
         </div>
       </div>
-      <div class="step">
+      <div class="step fade-up">
         <div class="step-number">2</div>
         <div class="step-content">
           <h3>Customers Scan</h3>
           <p>Diners scan the KleanMark QR code at the table to view the real-time hygiene trust score.</p>
         </div>
       </div>
-      <div class="step">
+      <div class="step fade-up">
         <div class="step-number">3</div>
         <div class="step-content">
           <h3>Earn Rewards</h3>
           <p>Customers check-in securely via OTP to earn loyalty stars for free food and drinks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-founders">
+    <div class="container">
+      <h2 class="fade-up">Meet the Founders</h2>
+      <div class="founders-grid fade-up">
+        <div class="founder-card">
+          <img src="assets/images/Sayan%20Maity.png" alt="Sayan Maity" class="founder-img">
+          <h3>Sayan Maity</h3>
+          <p>Co-Founder</p>
+        </div>
+        <div class="founder-card">
+          <img src="assets/images/CEO%202.png" alt="CEO 2" class="founder-img">
+          <h3 id="ceo2-name">CEO 2</h3>
+          <p>Co-Founder</p>
         </div>
       </div>
     </div>
@@ -82,6 +101,21 @@
       }
       window.location.href = `public-vendor.html?id=${vendorId}`;
     }
+
+    // Scroll Animations
+    document.addEventListener("DOMContentLoaded", function() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.fade-up').forEach((el) => {
+        observer.observe(el);
+      });
+    });
   </script>
 </body>
 </html>

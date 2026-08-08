@@ -21,6 +21,7 @@
       <div class="tab" data-target="images">Proof Images</div>
       <div class="tab" data-target="qr">My QR Code</div>
       <div class="tab" data-target="rewards">Redeem Rewards</div>
+      <div class="tab" data-target="settings">Settings</div>
     </div>
 
     <div class="main-content">
@@ -42,6 +43,24 @@
           <div class="score-circle">
             <span id="trustScore" class="score-value">0</span>
             <span class="score-max">/100</span>
+          </div>
+        </div>
+
+        <div class="card" id="analyticsCard" style="display: none; margin-top: 24px;">
+          <h3>Scan Analytics</h3>
+          <div style="display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 120px; text-align: center; background: var(--background); padding: 16px; border-radius: 8px;">
+              <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="statScans">0</div>
+              <div style="color: var(--text-secondary); font-size: 0.875rem;">Profile Views</div>
+            </div>
+            <div style="flex: 1; min-width: 120px; text-align: center; background: var(--background); padding: 16px; border-radius: 8px;">
+              <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="statCheckins">0</div>
+              <div style="color: var(--text-secondary); font-size: 0.875rem;">Check-ins</div>
+            </div>
+            <div style="flex: 1; min-width: 120px; text-align: center; background: var(--background); padding: 16px; border-radius: 8px;">
+              <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="statConv">0%</div>
+              <div style="color: var(--text-secondary); font-size: 0.875rem;">Conversion</div>
+            </div>
           </div>
         </div>
       </div>
@@ -105,6 +124,23 @@
               </select>
             </div>
             <button type="submit" class="btn btn-primary">Mark as Redeemed</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div id="settings" class="tab-pane">
+        <div class="card">
+          <h2>Dashboard Settings</h2>
+          
+          <h3 style="margin-top: 24px; margin-bottom: 8px;">Staff PIN Configuration</h3>
+          <p>Set a Staff PIN to allow your employees to redeem rewards on a customer's phone without needing access to this dashboard.</p>
+          <form id="settingsForm" style="margin-top: 16px;">
+            <div class="form-group">
+              <label class="form-label">Staff PIN</label>
+              <input type="text" id="staffPinSet" class="form-control" placeholder="e.g. 1234">
+            </div>
+            <button type="submit" class="btn btn-primary">Save Settings</button>
           </form>
         </div>
       </div>

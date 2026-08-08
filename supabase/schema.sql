@@ -18,7 +18,9 @@ CREATE TABLE vendors (
     last_checklist_at TIMESTAMPTZ,
     last_image_at TIMESTAMPTZ,
     renewal_deadline DATE,
-    renewal_warned BOOLEAN DEFAULT FALSE
+    renewal_warned BOOLEAN DEFAULT FALSE,
+    total_scans INT DEFAULT 0,
+    staff_pin TEXT
 );
 
 -- CHECKLIST ANSWERS TABLE

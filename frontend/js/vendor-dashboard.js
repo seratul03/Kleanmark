@@ -52,6 +52,9 @@ async function loadDashboard() {
     vendorId = vendor.id;
     document.getElementById('vendorName').textContent = vendor.business_name;
     document.getElementById('trustScore').textContent = Math.round(vendor.trust_score);
+    if (vendor.staff_pin) {
+      document.getElementById('staffPinSet').value = vendor.staff_pin;
+    }
     
     const badgeVerified = document.getElementById('badgeVerified');
     if (vendor.verified) {
@@ -72,6 +75,17 @@ async function loadDashboard() {
     document.getElementById('btnPreviewPublic').onclick = () => {
       window.open(`public-vendor.html?id=${vendor.id}`, '_blank');
     };
+
+    // Load Analytics
+    try {
+      const analytics = await fetchAPI('/vendors/analytics');
+      document.getElementById('statScans').textContent = analytics.total_scans;
+      document.getElementById('statCheckins').textContent = analytics.total_checkins;
+      document.getElementById('statConv').textContent = `${analytics.conversion_rate}%`;
+      document.getElementById('analyticsCard').style.display = 'block';
+    } catch (e) {
+      console.warn("Analytics not available yet.", e);
+    }
 
     // Load Checklist
     const answers = await fetchAPI('/checklist/my');
@@ -223,6 +237,22 @@ document.getElementById('redeemForm').addEventListener('submit', async (e) => {
     });
     showToast(res.message);
     document.getElementById('redeemForm').reset();
+  } catch (error) {}
+});
+
+document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const payload = {
+    staff_pin: document.getElementById('staffPinSet').value
+  };
+
+  try {
+    await fetchAPI('/vendors/me', {
+      method: 'PUT',
+      body: JSON.stringify(payload)
+    });
+    showToast("Settings saved successfully!", "success");
   } catch (error) {}
 });
 
