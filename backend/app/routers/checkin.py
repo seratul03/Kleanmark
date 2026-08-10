@@ -3,7 +3,7 @@ from app.models.checkin import CheckInRequest, CheckInResponse
 from app.database import supabase
 from app.dependencies import get_current_customer
 from app.services.fraud import check_fraud
-from datetime import datetime
+from datetime import datetime, timezone
 
 router = APIRouter(prefix="/checkin", tags=["checkin"])
 
@@ -22,7 +22,7 @@ def customer_checkin(req: CheckInRequest, current_customer: dict = Depends(get_c
         raise HTTPException(status_code=403, detail="Check-in unavailable for this vendor")
         
     # 2. Check 1 per day rule
-    today = datetime.now().date().isoformat()
+    today = datetime.now(timezone.utc).date().isoformat()
     visit_res = supabase.table("visits").select("id").eq("customer_id", customer_id).eq("vendor_id", vendor_id).eq("visit_date", today).execute()
     
     if visit_res.data:

@@ -188,7 +188,10 @@ async function submitFeedback() {
   }
   
   try {
-    // Currently mocked. In future, hit POST /public/vendor/:id/feedback
+    await fetchAPI(`/public/vendor/${vendorId}/feedback`, {
+      method: 'POST',
+      body: JSON.stringify({ feedback_text: text })
+    });
     showToast("Feedback submitted anonymously. Thank you!", "success");
     document.getElementById('feedbackText').value = '';
   } catch(e) {

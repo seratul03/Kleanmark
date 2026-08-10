@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from datetime import datetime
+from datetime import datetime, timezone
 from passlib.context import CryptContext
 from app.models.admin import (
     AdminLogin, TrustScoreOverride, RewardTierCreate, 
@@ -145,12 +145,37 @@ def get_dashboard_analytics(admin: dict = Depends(get_admin)):
 
 @router.post("/vendors")
 def create_vendor(data: VendorCreateByAdmin, admin: dict = Depends(get_admin)):
-    # Hash password
-    data_dict = data.dict()
-    data_dict["password_hash"] = pwd_context.hash(data_dict.pop("password"))
-    res = supabase.table("vendors").insert(data_dict).execute()
-    log_admin_action(admin["username"], "Created Vendor", res.data[0]["id"], f"Business: {data.business_name}")
-    return res.data[0]
+    try:
+        # Create in Supabase Auth first
+        auth_res = supabase.auth.admin.create_user({
+            "email": data.email,
+            "password": data.password,
+            "email_confirm": True  # Admin-created accounts are pre-confirmed
+        })
+        if not auth_res.user:
+            raise HTTPException(status_code=500, detail="Failed to create user in Auth")
+        
+        new_user_id = auth_res.user.id
+        
+        # Insert vendor profile (no password_hash)
+        profile = {
+            "id": new_user_id,
+            "business_name": data.business_name,
+            "owner_name": data.owner_name,
+            "email": data.email,
+            "address": data.address,
+            "category": data.category,
+            "trust_score": data.trust_score,
+            "verified": data.verified,
+            "active": data.active
+        }
+        res = supabase.table("vendors").insert(profile).execute()
+        log_admin_action(admin["username"], "Created Vendor", new_user_id, f"Business: {data.business_name}")
+        return res.data[0]
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.put("/vendors/{vendor_id}")
 def update_vendor(vendor_id: str, data: VendorUpdateByAdmin, admin: dict = Depends(get_admin)):
@@ -223,7 +248,7 @@ def update_subscription_plan(plan_id: str, data: SubscriptionPlanUpdate, admin: 
     update_data = {k: v for k, v in data.dict().items() if v is not None}
     if not update_data:
         return {"message": "No fields to update"}
-    update_data["updated_at"] = datetime.now().isoformat()
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
     res = supabase.table("subscription_plans").update(update_data).eq("id", plan_id).execute()
     log_admin_action(admin["username"], "Updated Subscription Plan", plan_id)
     return res.data[0] if res.data else {"message": "Updated successfully"}

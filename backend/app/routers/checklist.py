@@ -35,8 +35,9 @@ def submit_checklist(
     # Update last_checklist_at
     supabase.table("vendors").update({"last_checklist_at": "now()"}).eq("id", vendor_id).execute()
     
-    # Recalculate trust score (to be implemented)
-    # new_score = recalculate_trust_score(vendor_id)
+    # Recalculate trust score immediately
+    from app.services.trust_engine import calculate_trust_score
+    calculate_trust_score(vendor_id)
     
     return {"message": "Checklist saved successfully"}
 

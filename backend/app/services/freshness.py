@@ -1,8 +1,8 @@
 from app.database import supabase
-from datetime import datetime
+from datetime import datetime, timezone
 
 def run_freshness_check():
-    today = datetime.now().date()
+    today = datetime.now(timezone.utc).date()
     
     # Get all active vendors with a renewal deadline
     response = supabase.table("vendors").select("id, last_image_at, renewal_deadline").eq("active", True).not_.is_("renewal_deadline", "null").execute()

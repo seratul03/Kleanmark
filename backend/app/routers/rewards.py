@@ -2,7 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.models.reward import RewardRedeemRequest
 from app.database import supabase
 from app.dependencies import get_current_vendor, get_current_customer
+from passlib.context import CryptContext
 from pydantic import BaseModel
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class RedeemPinRequest(BaseModel):
     vendor_id: str
@@ -70,7 +73,8 @@ def redeem_reward_via_pin(req: RedeemPinRequest, current_customer: dict = Depend
         raise HTTPException(status_code=404, detail="Vendor not found")
         
     vendor_pin = vendor_res.data[0].get("staff_pin")
-    if not vendor_pin or vendor_pin != req.staff_pin:
+    # Staff PIN is stored hashed; verify with bcrypt
+    if not vendor_pin or not pwd_context.verify(req.staff_pin, vendor_pin):
         raise HTTPException(status_code=401, detail="Invalid Staff PIN or PIN not set by vendor")
         
     # 2. Get reward tier

@@ -1,4 +1,8 @@
-requireAuth();
+// Auth guard — verifies token is still valid before loading anything
+(async () => {
+  await requireAuth();
+  loadDashboard();
+})();
 
 const checklistQuestions = {
   "Kitchen Cleanliness": [
@@ -56,6 +60,10 @@ async function loadDashboard() {
       document.getElementById('staffPinSet').value = vendor.staff_pin;
     }
     
+    // Generate Badge Image
+    const widgetUrl = `http://127.0.0.1:8000/public/widget/${vendor.id}`;
+    document.getElementById('badgeImageContainer').innerHTML = `<img src="${widgetUrl}" alt="Trust Badge" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">`;
+    
     const badgeVerified = document.getElementById('badgeVerified');
     if (vendor.verified) {
       badgeVerified.textContent = 'Verified';
@@ -94,6 +102,10 @@ async function loadDashboard() {
     // Load Images
     const images = await fetchAPI('/images/my');
     renderImageSlots(images);
+    
+    // Load Tickets
+    const tickets = await fetchAPI('/vendors/tickets');
+    renderTickets(tickets);
 
     // Load Reward Tiers (for redemption dropdown)
     // Actually we need to fetch public tiers, but we don't have a public reward list endpoint without vendor id.
@@ -256,4 +268,74 @@ document.getElementById('settingsForm').addEventListener('submit', async (e) => 
   } catch (error) {}
 });
 
-loadDashboard();
+// ----- Tickets Logic -----
+let currentTicketId = null;
+
+function renderTickets(tickets) {
+  const container = document.getElementById('ticketsContainer');
+  if (!tickets || tickets.length === 0) {
+    container.innerHTML = '<p>No feedback tickets at this time.</p>';
+    return;
+  }
+  
+  let html = '';
+  tickets.forEach(t => {
+    const isResolved = t.status === 'resolved';
+    html += `
+      <div style="background: var(--background); padding: 16px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid ${isResolved ? 'var(--primary)' : 'var(--danger)'}">
+        <p><strong>Customer Feedback:</strong> "${t.feedback_text}"</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+          <span class="badge ${isResolved ? 'badge-success' : 'badge-danger'}">${t.status.toUpperCase()}</span>
+          ${isResolved ? `<a href="${t.resolution_image_url}" target="_blank" style="font-size: 0.875rem;">View Proof</a>` : `<button class="btn btn-primary" style="padding: 4px 12px; font-size: 0.875rem; width: auto;" onclick="openResolutionModal('${t.id}')">Resolve Issue</button>`}
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function openResolutionModal(ticketId) {
+  currentTicketId = ticketId;
+  document.getElementById('resolutionModal').classList.add('active');
+}
+
+function closeResolutionModal() {
+  currentTicketId = null;
+  document.getElementById('resolutionImageInput').value = '';
+  document.getElementById('resolutionModal').classList.remove('active');
+}
+
+async function submitResolution() {
+  if (!currentTicketId) return;
+  const input = document.getElementById('resolutionImageInput');
+  if (!input.files || input.files.length === 0) {
+    showToast('Please select a photo.', 'warning');
+    return;
+  }
+  
+  try {
+    showToast('Uploading proof image...', 'success');
+    
+    // Upload to /images/upload endpoint using FormData, same as proof images
+    const formData = new FormData();
+    formData.append('image_type', 'Kitchen'); // Use Kitchen as a stand-in type for resolution images
+    formData.append('file', input.files[0]);
+    
+    const uploadRes = await fetchAPI('/images/upload', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const realUrl = uploadRes.image_url;
+    
+    await fetchAPI(`/vendors/tickets/${currentTicketId}/resolve`, {
+      method: 'POST',
+      body: JSON.stringify({ resolution_image_url: realUrl })
+    });
+    showToast('Ticket resolved! Trust score increased.', 'success');
+    closeResolutionModal();
+    loadDashboard();
+  } catch (error) {}
+}
+
+// Page init handled by async IIFE at top of file

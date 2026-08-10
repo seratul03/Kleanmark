@@ -8,18 +8,20 @@ security = HTTPBearer()
 
 def get_current_vendor(credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
-    payload = decode_token(token)
-    
-    if not payload or payload.get("role") != "vendor":
+    try:
+        # Supabase API validation (verifies token is valid and not revoked)
+        user_res = supabase.auth.get_user(token)
+        if not user_res or not user_res.user:
+            raise ValueError("Invalid session")
+            
+        vendor_id = user_res.user.id
+    except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
-    vendor_id = payload.get("sub")
-    if not vendor_id:
-        raise HTTPException(status_code=401, detail="Invalid token payload")
+        
         
     response = supabase.table("vendors").select("*").eq("id", vendor_id).execute()
     
