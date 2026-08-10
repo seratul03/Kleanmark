@@ -1,4 +1,8 @@
-requireAuth();
+// Auth guard — verifies token is still valid before loading anything
+(async () => {
+  await requireAuth();
+  loadDashboard();
+})();
 
 // Tab Navigation
 document.querySelectorAll('.tab').forEach(tab => {
@@ -106,11 +110,8 @@ async function loadFraud() {
 
 async function loadRewards() {
   try {
-    const data = await fetchAPI('/public/vendor/dummy-id'); // will fail, but we don't have a public no-auth list except through vendor public.
-    // Let's just create a quick direct api call. Wait, we don't have a direct GET /admin/rewards/tiers.
-    // Let's use public endpoints if it was available, or just fetch via supabase if we can.
-    // Actually, we don't have a GET /admin/rewards/tiers in the router. I will just skip fetching list for now in MVP, or add it.
-    // I'll leave it empty for MVP, assume it's created.
+    const tiers = await fetchAPI('/admin/rewards/tiers');
+    // Tiers are available but there's no display UI currently — data is ready for future use
   } catch (e) {}
 }
 
@@ -232,4 +233,4 @@ async function scoreImage(id) {
   } catch(e) {}
 }
 
-loadDashboard();
+// Page init handled by async IIFE at top of file

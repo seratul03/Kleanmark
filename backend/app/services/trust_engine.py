@@ -4,8 +4,10 @@ def calculate_trust_score(vendor_id: str) -> float:
     # 1. Checklist Score (30 points)
     # Total questions = 18
     checklist_res = supabase.table("checklist_answers").select("answer").eq("vendor_id", vendor_id).execute()
+    total_questions = len(checklist_res.data) if checklist_res.data else 0
     yes_count = sum(1 for item in checklist_res.data if item["answer"] is True)
-    checklist_pct = (yes_count / 18) * 30 if checklist_res.data else 0
+    # Use dynamic count; fall back to max of 18 to prevent score inflation if only partial answers stored
+    checklist_pct = (yes_count / max(total_questions, 18)) * 30 if total_questions > 0 else 0
 
     # 2. Image Score (50 points)
     # 5 categories max. Each image gives vendor_score (5) + admin_score (0-5)

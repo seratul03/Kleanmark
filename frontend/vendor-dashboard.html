@@ -21,6 +21,7 @@
       <div class="tab" data-target="images">Proof Images</div>
       <div class="tab" data-target="qr">My QR Code</div>
       <div class="tab" data-target="rewards">Redeem Rewards</div>
+      <div class="tab" data-target="tickets">Feedback Tickets</div>
       <div class="tab" data-target="settings">Settings</div>
     </div>
 
@@ -142,9 +143,42 @@
             </div>
             <button type="submit" class="btn btn-primary">Save Settings</button>
           </form>
+
+          <hr style="margin: 32px 0; border: none; border-top: 1px solid var(--border);">
+
+          <h3>Downloadable Trust Badge</h3>
+          <p>Download this image and post it on your social media, or add it to your website to show customers your hygiene score.</p>
+          <div style="background: var(--background); padding: 24px; border-radius: 8px; margin-top: 16px; text-align: center; border: 1px solid var(--border);">
+            <div id="badgeImageContainer" style="margin-bottom: 16px;">
+              <!-- Rendered via JS -->
+            </div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">Right-click the image above and select <strong>"Save Image As..."</strong> to download it.</p>
+          </div>
         </div>
       </div>
 
+      <!-- TICKETS -->
+      <div id="tickets" class="tab-pane">
+        <div class="card">
+          <h2>Action Required: Feedback Tickets</h2>
+          <p>Resolve customer complaints by uploading a photo. Unresolved tickets lower your Trust Score.</p>
+          <div id="ticketsContainer" style="margin-top: 16px;">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Resolution Upload Modal -->
+  <div class="modal-overlay" id="resolutionModal">
+    <div class="modal-content">
+      <h3>Resolve Ticket</h3>
+      <p>Upload a photo proving the issue is fixed.</p>
+      <input type="file" id="resolutionImageInput" accept="image/*" class="form-control" style="margin-bottom: 16px;">
+      <button class="btn btn-primary" onclick="submitResolution()">Upload & Resolve</button>
+      <button class="btn btn-outline" style="margin-top: 8px;" onclick="closeResolutionModal()">Cancel</button>
     </div>
   </div>
 

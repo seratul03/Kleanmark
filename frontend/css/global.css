@@ -1,16 +1,19 @@
 :root {
-  /* Color Palette */
-  --primary: #00B37E;
-  --primary-hover: #00996b;
+  /* Color Palette - Trust & Verification Theme */
+  --primary: #0A2540; /* Trust Blue (deep navy) */
+  --primary-hover: #113659;
+  --secondary: #00D4FF; /* Vibrant cyan accent */
+  --verification: #00D26A; /* Verification Green */
+  --verification-hover: #00B359;
   --surface: #FFFFFF;
-  --background: #F4FBF7;
-  --text-primary: #0D1C14;
-  --text-secondary: #5A7A68;
-  --danger: #E53E3E;
-  --warning: #F6AD55;
-  --border: #E0EDE8;
+  --background: #F8FAFC; /* Crisp clinical slate-white */
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --danger: #EF4444;
+  --warning: #F59E0B;
+  --border: #E2E8F0;
   --star-filled: #FBBF24;
-  --star-empty: #E2E8F0;
+  --star-empty: #CBD5E1;
 
   /* Typography */
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -93,6 +96,17 @@ p {
 
 .btn-primary:hover {
   background-color: var(--primary-hover);
+  box-shadow: 0 4px 12px rgba(10, 37, 64, 0.15);
+}
+
+.btn-success {
+  background-color: var(--verification);
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: var(--verification-hover);
+  box-shadow: 0 4px 12px rgba(0, 210, 106, 0.2);
 }
 
 .btn-outline {
@@ -102,7 +116,7 @@ p {
 }
 
 .btn-outline:hover {
-  background-color: var(--background);
+  background-color: #F1F5F9;
 }
 
 /* Form inputs */
@@ -147,8 +161,8 @@ p {
 }
 
 .badge-success {
-  background-color: rgba(0, 179, 126, 0.1);
-  color: var(--primary);
+  background-color: rgba(0, 210, 106, 0.1);
+  color: var(--verification);
 }
 
 .badge-warning {

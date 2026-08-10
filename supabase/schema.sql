@@ -3,7 +3,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- VENDORS TABLE
 CREATE TABLE vendors (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    -- Link id directly to Supabase Auth user id
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     business_name TEXT NOT NULL,
     owner_name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
@@ -13,7 +14,6 @@ CREATE TABLE vendors (
     verified BOOLEAN DEFAULT FALSE,
     active BOOLEAN DEFAULT TRUE,
     qr_code TEXT,
-    password_hash TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     last_checklist_at TIMESTAMPTZ,
     last_image_at TIMESTAMPTZ,
@@ -65,15 +65,7 @@ CREATE TABLE customers (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- OTP TOKENS TABLE
-CREATE TABLE otp_tokens (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    email TEXT NOT NULL,
-    otp_code TEXT NOT NULL,
-    expires_at TIMESTAMPTZ NOT NULL,
-    used BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
+
 
 -- VISITS TABLE
 CREATE TABLE visits (
@@ -144,4 +136,15 @@ CREATE TABLE admin_logs (
     target_id UUID,
     details TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- FEEDBACK TICKETS TABLE
+CREATE TABLE feedback_tickets (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    vendor_id UUID REFERENCES vendors(id) ON DELETE CASCADE,
+    feedback_text TEXT NOT NULL,
+    status TEXT DEFAULT 'open', -- 'open' or 'resolved'
+    resolution_image_url TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    resolved_at TIMESTAMPTZ
 );
