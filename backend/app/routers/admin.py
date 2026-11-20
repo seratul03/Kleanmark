@@ -27,6 +27,11 @@ def admin_login(creds: AdminLogin):
     access_token = create_access_token(data={"sub": "admin", "role": "admin"})
     return {"access_token": access_token, "token_type": "bearer"}
 
+@router.get("/me")
+def admin_me(admin: dict = Depends(get_admin)):
+    """Verify admin token is valid. Used by frontend auth guard."""
+    return {"username": admin["username"], "role": admin["role"]}
+
 @router.get("/vendors")
 def list_vendors(admin: dict = Depends(get_admin)):
     response = supabase.table("vendors").select("id, business_name, category, trust_score, verified, active, created_at").order("created_at", desc=True).execute()

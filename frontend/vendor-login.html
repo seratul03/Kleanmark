@@ -3,45 +3,278 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vendor Login - KleanMark</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Vendor Login — KleanMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <link rel="stylesheet" href="css/global.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: var(--background);
+      display: flex;
+      align-items: stretch;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ---- Split Layout ---- */
+    .auth-layout {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* ---- Left Panel ---- */
+    .auth-panel {
+      flex: 0 0 45%;
+      background: var(--gradient-dark);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 56px;
+    }
+    .auth-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300C853' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+      pointer-events: none;
+    }
+    .panel-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .panel-orb-1 {
+      width: 300px; height: 300px;
+      background: rgba(0,200,83,0.25);
+      top: -80px; right: -60px;
+    }
+    .panel-orb-2 {
+      width: 200px; height: 200px;
+      background: rgba(105,240,174,0.15);
+      bottom: 60px; left: -40px;
+    }
+    .panel-logo {
+      height: 44px;
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 1;
+    }
+    .panel-heading {
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.25;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 20px;
+    }
+    .panel-heading span {
+      background: linear-gradient(135deg, #69F0AE, #00C853);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .panel-desc {
+      color: rgba(255,255,255,0.65);
+      font-size: 1rem;
+      line-height: 1.65;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 48px;
+    }
+    .panel-features {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .panel-feature {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.9rem;
+    }
+    .panel-feature-icon {
+      width: 36px; height: 36px;
+      background: rgba(0,200,83,0.2);
+      border: 1px solid rgba(0,200,83,0.3);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* ---- Right Form Side ---- */
+    .auth-form-side {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px;
+      background: #fff;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+    }
+    .auth-mobile-logo {
+      display: none;
+      height: 36px;
+      margin-bottom: 32px;
+    }
+    .auth-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .auth-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 36px;
+    }
+
+    /* registration message */
+    #registrationMsg {
+      display: none;
+      background: var(--primary-pale);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      color: var(--primary-dark);
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .forgot-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
+    .forgot-link {
+      font-size: 0.8rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .forgot-link:hover { text-decoration: underline; }
+
+    .auth-divider {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin: 24px 0;
+      position: relative;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 42%;
+      height: 1px;
+      background: var(--border);
+    }
+    .auth-divider::before { left: 0; }
+    .auth-divider::after { right: 0; }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .auth-footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .auth-footer a:hover { text-decoration: underline; }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .auth-panel { display: none; }
+      .auth-form-side { padding: 40px 24px; }
+      .auth-mobile-logo { display: block; }
+      body { background: #fff; }
+    }
+  </style>
 </head>
 <body>
-  <div class="container" style="padding-top: 64px;">
-    <div class="card">
-      <div style="text-align: center; margin-bottom: 32px;">
-        <h1 style="color: var(--primary);">KleanMark</h1>
-        <p>Vendor Dashboard Login</p>
-      </div>
+  <div class="auth-layout">
 
-      <div id="registrationMsg" style="display: none; background: #e6f7ef; color: var(--primary); padding: 12px; border-radius: 8px; margin-bottom: 24px; text-align: center; font-size: 0.875rem; font-weight: 500;">
-        Registration submitted. Please login, but note you will need Admin approval to be fully verified.
+    <!-- Left Panel -->
+    <div class="auth-panel">
+      <div class="panel-orb panel-orb-1"></div>
+      <div class="panel-orb panel-orb-2"></div>
+      <img src="assets/images/Logo.svg" alt="KleanMark" class="panel-logo">
+      <h1 class="panel-heading">Welcome<br>back to <span>KleanMark</span></h1>
+      <p class="panel-desc">Your hygiene dashboard awaits. Manage your trust score, proof images, QR code, and customer rewards — all in one place.</p>
+      <div class="panel-features">
+        <div class="panel-feature">
+          <div class="panel-feature-icon">🏆</div>
+          <span>Live trust score updated in real time</span>
+        </div>
+        <div class="panel-feature">
+          <div class="panel-feature-icon">📊</div>
+          <span>Scan analytics & customer insights</span>
+        </div>
+        <div class="panel-feature">
+          <div class="panel-feature-icon">⭐</div>
+          <span>Loyalty reward redemption system</span>
+        </div>
       </div>
-      
-      <form id="loginForm">
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input type="email" id="email" class="form-control" required>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <input type="password" id="password" class="form-control" required placeholder="••••••••">
-          <div style="text-align: right; margin-top: 4px;">
-            <a href="vendor-forgot-password.html" style="font-size: 0.75rem; color: var(--primary); text-decoration: none;">Forgot Password?</a>
-          </div>
-        </div>
-        
-        <button type="submit" class="btn btn-primary" id="loginBtn" style="margin-top: 8px;">Log In</button>
-      </form>
-      
-      <p style="text-align: center; margin-top: 24px; font-size: 0.875rem;">
-        New to KleanMark? <a href="vendor-register.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Register Here</a>
-      </p>
     </div>
+
+    <!-- Right Form -->
+    <div class="auth-form-side">
+      <div class="auth-card">
+        <img src="assets/images/Logo.svg" alt="KleanMark" class="auth-mobile-logo">
+
+        <h2 class="auth-title">Sign In</h2>
+        <p class="auth-subtitle">Enter your credentials to access your vendor dashboard.</p>
+
+        <div id="registrationMsg">
+          🎉 Registration submitted! You can log in now — full features unlock after Admin approval.
+        </div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="email" class="form-control" placeholder="owner@restaurant.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+            <div class="forgot-row">
+              <a href="vendor-forgot-password.html" class="forgot-link">Forgot password?</a>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="loginBtn" style="margin-top: 8px;">
+            Sign In to Dashboard
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          New to KleanMark? <a href="vendor-register.html">Create an account</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 
+  <div id="toast-container"></div>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/vendor-login.js"></script>

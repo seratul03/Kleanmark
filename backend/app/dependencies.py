@@ -21,8 +21,8 @@ def get_current_vendor(credentials: HTTPAuthorizationCredentials = Depends(secur
             detail="Invalid authentication credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-        
-        
+
+    # This MUST be outside the try/except to actually execute after successful auth
     response = supabase.table("vendors").select("*").eq("id", vendor_id).execute()
     
     if not response.data:

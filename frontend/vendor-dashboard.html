@@ -3,117 +3,206 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vendor Dashboard - KleanMark</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Vendor Dashboard — KleanMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/vendor.css">
 </head>
-<body>
+<body class="vendor-dashboard">
+
+  <!-- ===== TOP NAV ===== -->
   <div class="top-nav">
-    <div class="nav-brand">KleanMark Vendor</div>
-    <button class="btn btn-outline" style="width: auto; padding: 6px 12px; font-size: 0.875rem;" onclick="logout()">Logout</button>
+    <div class="nav-brand">
+      <img src="assets/images/Logo.svg" alt="KleanMark" style="height:28px; margin-right:10px; vertical-align:middle;">
+      <span>Vendor Dashboard</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button class="btn btn-ghost btn-sm" onclick="window.location.href='vendor-subscription.html'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Subscription
+      </button>
+      <button class="btn btn-outline btn-sm" onclick="logout()">Sign Out</button>
+    </div>
   </div>
 
+  <!-- ===== DASHBOARD LAYOUT ===== -->
   <div class="dashboard-container">
-    <div class="sidebar">
-      <div class="tab active" data-target="overview">Overview</div>
-      <div class="tab" data-target="checklist">Hygiene Checklist</div>
-      <div class="tab" data-target="images">Proof Images</div>
-      <div class="tab" data-target="qr">My QR Code</div>
-      <div class="tab" data-target="rewards">Redeem Rewards</div>
-      <div class="tab" data-target="tickets">Feedback Tickets</div>
-      <div class="tab" data-target="settings">Settings</div>
-    </div>
 
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="sidebar" aria-label="Vendor dashboard navigation">
+      <div class="tab active" data-target="overview">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Overview
+      </div>
+      <div class="tab" data-target="checklist">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Hygiene Checklist
+      </div>
+      <div class="tab" data-target="images">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Proof Images
+      </div>
+      <div class="tab" data-target="qr">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/></svg>
+        My QR Code
+      </div>
+      <div class="tab" data-target="rewards">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Redeem Rewards
+      </div>
+      <div class="tab" data-target="tickets">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Feedback Tickets
+      </div>
+      <div class="tab" data-target="settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
     <div class="main-content">
-      <!-- OVERVIEW -->
+
+      <!-- ======= OVERVIEW TAB ======= -->
       <div id="overview" class="tab-pane active">
+
+        <!-- Header Card -->
         <div class="card header-card">
-          <h2 id="vendorName">Loading...</h2>
-          <div style="margin-top: 16px; display: flex; gap: 8px;">
-            <span id="badgeVerified" class="badge badge-warning">Pending Approval</span>
-            <span id="badgeActive" class="badge badge-success">Active</span>
-          </div>
-          <div style="margin-top: 24px;">
-            <button class="btn btn-outline" style="width: auto; padding: 8px 16px;" onclick="window.location.href='vendor-subscription.html'">Manage Subscription</button>
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+            <div>
+              <div class="hero-eyebrow"><span class="live-dot"></span>Welcome back</div>
+              <h2 id="vendorName" style="font-size:1.5rem; font-weight:800; color:var(--text-primary); margin-bottom:10px;">Loading...</h2>
+              <p class="hero-sub">Here’s how your kitchen is performing on KleanMark today.</p>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <span id="badgeVerified" class="badge badge-warning">Pending Approval</span>
+                <span id="badgeActive" class="badge badge-success">Active</span>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="window.location.href='vendor-subscription.html'">
+              Manage Subscription →
+            </button>
           </div>
         </div>
 
-        <div class="score-card card">
-          <h3>Trust Score</h3>
-          <div class="score-circle">
-            <span id="trustScore" class="score-value">0</span>
-            <span class="score-max">/100</span>
-          </div>
-        </div>
+        <!-- Score + Analytics Grid -->
+        <div class="analytics-grid">
 
-        <div class="card" id="analyticsCard" style="display: none; margin-top: 24px;">
-          <h3>Scan Analytics</h3>
-          <div style="display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap;">
-            <div style="flex: 1; min-width: 120px; text-align: center; background: var(--background); padding: 16px; border-radius: 8px;">
-              <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="statScans">0</div>
-              <div style="color: var(--text-secondary); font-size: 0.875rem;">Profile Views</div>
+          <!-- Score Ring -->
+          <div class="score-card card">
+            <div class="score-label-top">KleanMark Trust Score</div>
+            <div class="score-ring-wrap">
+              <div class="score-ring">
+                <span id="trustScore" class="score-value">0</span>
+                <span class="score-max">/100</span>
+              </div>
             </div>
-            <div style="flex: 1; min-width: 120px; text-align: center; background: var(--background); padding: 16px; border-radius: 8px;">
-              <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="statCheckins">0</div>
-              <div style="color: var(--text-secondary); font-size: 0.875rem;">Check-ins</div>
+            <div class="score-breakdown">
+              <div class="breakdown-item">
+                <span class="breakdown-label">Checklist</span>
+                <div class="breakdown-bar"><div class="breakdown-fill" style="width: 60%"></div></div>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-label">Images</span>
+                <div class="breakdown-bar"><div class="breakdown-fill" style="width: 40%"></div></div>
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-label">Reputation</span>
+                <div class="breakdown-bar"><div class="breakdown-fill" style="width: 75%"></div></div>
+              </div>
             </div>
-            <div style="flex: 1; min-width: 120px; text-align: center; background: var(--background); padding: 16px; border-radius: 8px;">
-              <div style="font-size: 2rem; font-weight: 700; color: var(--primary);" id="statConv">0%</div>
-              <div style="color: var(--text-secondary); font-size: 0.875rem;">Conversion</div>
+          </div>
+
+          <!-- Analytics Card -->
+          <div class="card" id="analyticsCard" style="display: none;">
+            <h3 style="font-size:1rem; font-weight:700; margin-bottom:20px; color:var(--text-primary);">Scan Analytics</h3>
+            <div class="analytics-stats">
+              <div class="stat-block">
+                <div class="stat-block-num" id="statScans">0</div>
+                <div class="stat-block-label">Profile Views</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-block-num" id="statCheckins">0</div>
+                <div class="stat-block-label">Check-ins</div>
+              </div>
+              <div class="stat-block">
+                <div class="stat-block-num" id="statConv">0%</div>
+                <div class="stat-block-label">Conversion</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- CHECKLIST -->
+      <!-- ======= CHECKLIST TAB ======= -->
       <div id="checklist" class="tab-pane">
         <div class="card">
-          <h2>Hygiene Checklist</h2>
-          <p>Answer truthfully. Your score updates immediately.</p>
+          <div style="margin-bottom:24px;">
+            <h2 style="font-size:1.3rem; font-weight:800; color:var(--text-primary); margin-bottom:6px;">Hygiene Checklist</h2>
+            <p style="color:var(--text-secondary); font-size:0.9rem;">Answer truthfully — your trust score updates immediately after submission.</p>
+          </div>
           <form id="checklistForm">
-            <!-- Rendered via JS -->
-            <div id="checklistContainer"></div>
-            <button type="submit" class="btn btn-primary" style="margin-top: 24px;">Submit Checklist</button>
+            <div id="checklistContainer">
+              <!-- Rendered by vendor-dashboard.js -->
+              <div style="color:var(--text-secondary); font-size:0.9rem;">Loading checklist items...</div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top:28px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Submit Checklist
+            </button>
           </form>
         </div>
       </div>
 
-      <!-- IMAGES -->
+      <!-- ======= IMAGES TAB ======= -->
       <div id="images" class="tab-pane">
         <div class="card">
-          <h2>Proof Images</h2>
-          <p>Upload clear photos of your premises. Mandatory for trust score.</p>
-          <div id="imageSlotsContainer">
-            <!-- Rendered via JS -->
+          <div style="margin-bottom:20px;">
+            <h2 style="font-size:1.3rem; font-weight:800; color:var(--text-primary); margin-bottom:6px;">Proof Images</h2>
+            <p style="color:var(--text-secondary); font-size:0.9rem;">Upload clear, well-lit photos of your kitchen, storage, and prep areas. Admin reviews before they're shown publicly.</p>
+          </div>
+          <div id="imageSlotsContainer" class="image-slots-grid">
+            <!-- Rendered by vendor-dashboard.js -->
           </div>
         </div>
       </div>
 
-      <!-- QR CODE -->
+      <!-- ======= QR CODE TAB ======= -->
       <div id="qr" class="tab-pane">
-        <div class="card" style="text-align: center;">
-          <h2>My KleanMark QR</h2>
-          <p>Print and display this QR for customers to scan.</p>
-          
-          <div id="qrContainer" style="margin: 32px 0; min-height: 200px;">
-            <button class="btn btn-primary" onclick="generateQR()" style="max-width: 200px;">Generate QR Code</button>
+        <div class="card" style="text-align:center;">
+          <h2 style="font-size:1.3rem; font-weight:800; color:var(--text-primary); margin-bottom:8px;">My KleanMark QR</h2>
+          <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:24px;">Print this QR and display it on every table. Customers scan to see your score and earn loyalty rewards.</p>
+
+          <div id="qrContainer" style="margin:0 auto 22px; min-height:180px; max-width:320px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--background); border-radius:20px; padding:20px; border:2px dashed var(--border);">
+            <button class="btn btn-primary" onclick="generateQR()" style="max-width:200px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Generate QR Code
+            </button>
           </div>
-          
-          <div style="background: var(--background); padding: 16px; border-radius: 8px;">
-            <p style="margin-bottom: 8px; font-weight: 500;">Developer Action:</p>
-            <button class="btn btn-outline" id="btnPreviewPublic" style="max-width: 300px;">Preview Public Page</button>
+
+          <div style="background:var(--primary-pale); border:1px solid var(--border); border-radius:18px; padding:16px; max-width:380px; margin:0 auto;">
+            <p style="font-size:0.85rem; font-weight:600; color:var(--text-primary); margin-bottom:10px;">Preview Public Page</p>
+            <button class="btn btn-outline" id="btnPreviewPublic" style="max-width:240px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Open Customer View
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- REWARDS -->
+      <!-- ======= REWARDS TAB ======= -->
       <div id="rewards" class="tab-pane">
         <div class="card">
-          <h2>Redeem Customer Reward</h2>
-          <p>When a customer wants to claim a reward, they must show you their phone. Enter their email address and the reward ID they are claiming.</p>
-          
-          <form id="redeemForm" style="margin-top: 24px;">
+          <div style="margin-bottom:24px;">
+            <h2 style="font-size:1.3rem; font-weight:800; color:var(--text-primary); margin-bottom:6px;">Redeem Customer Reward</h2>
+            <p style="color:var(--text-secondary); font-size:0.9rem;">When a customer claims a reward, have them show you their phone. Enter their details below to verify and mark it redeemed.</p>
+          </div>
+
+          <div style="background:var(--primary-pale); border:1px solid rgba(0,200,83,0.2); border-radius:12px; padding:16px; margin-bottom:28px; font-size:0.85rem; color:var(--primary-dark); line-height:1.5;">
+            🌟 <strong>How it works:</strong> Customer shows their loyalty screen → You enter their email & selected reward → Press "Mark Redeemed" to confirm.
+          </div>
+
+          <form id="redeemForm">
             <div class="form-group">
               <label class="form-label">Customer Email</label>
               <input type="email" id="redeemEmail" class="form-control" required placeholder="customer@example.com">
@@ -121,69 +210,106 @@
             <div class="form-group">
               <label class="form-label">Reward Tier</label>
               <select id="redeemTierId" class="form-control" required>
-                <!-- Rendered via JS -->
+                <!-- Rendered by vendor-dashboard.js -->
               </select>
             </div>
-            <button type="submit" class="btn btn-primary">Mark as Redeemed</button>
+            <button type="submit" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Mark as Redeemed
+            </button>
           </form>
         </div>
       </div>
 
-      <!-- SETTINGS -->
-      <div id="settings" class="tab-pane">
-        <div class="card">
-          <h2>Dashboard Settings</h2>
-          
-          <h3 style="margin-top: 24px; margin-bottom: 8px;">Staff PIN Configuration</h3>
-          <p>Set a Staff PIN to allow your employees to redeem rewards on a customer's phone without needing access to this dashboard.</p>
-          <form id="settingsForm" style="margin-top: 16px;">
-            <div class="form-group">
-              <label class="form-label">Staff PIN</label>
-              <input type="text" id="staffPinSet" class="form-control" placeholder="e.g. 1234">
-            </div>
-            <button type="submit" class="btn btn-primary">Save Settings</button>
-          </form>
-
-          <hr style="margin: 32px 0; border: none; border-top: 1px solid var(--border);">
-
-          <h3>Downloadable Trust Badge</h3>
-          <p>Download this image and post it on your social media, or add it to your website to show customers your hygiene score.</p>
-          <div style="background: var(--background); padding: 24px; border-radius: 8px; margin-top: 16px; text-align: center; border: 1px solid var(--border);">
-            <div id="badgeImageContainer" style="margin-bottom: 16px;">
-              <!-- Rendered via JS -->
-            </div>
-            <p style="font-size: 0.875rem; color: var(--text-secondary);">Right-click the image above and select <strong>"Save Image As..."</strong> to download it.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- TICKETS -->
+      <!-- ======= TICKETS TAB ======= -->
       <div id="tickets" class="tab-pane">
         <div class="card">
-          <h2>Action Required: Feedback Tickets</h2>
-          <p>Resolve customer complaints by uploading a photo. Unresolved tickets lower your Trust Score.</p>
-          <div id="ticketsContainer" style="margin-top: 16px;">
-            <!-- Rendered via JS -->
+          <div style="margin-bottom:24px;">
+            <h2 style="font-size:1.3rem; font-weight:800; color:var(--text-primary); margin-bottom:6px;">Feedback Tickets</h2>
+            <p style="color:var(--text-secondary); font-size:0.9rem;">Customer complaints that need your attention. Resolve each one by uploading a photo proof. Unresolved tickets lower your Trust Score.</p>
+          </div>
+          <div id="ticketsContainer">
+            <!-- Rendered by vendor-dashboard.js -->
+            <div class="empty-state">
+              <div class="empty-icon">🎉</div>
+              <div class="empty-title">No Open Tickets</div>
+              <div class="empty-desc">Great work! No unresolved feedback at the moment.</div>
+            </div>
           </div>
         </div>
       </div>
 
-    </div>
-  </div>
+      <!-- ======= SETTINGS TAB ======= -->
+      <div id="settings" class="tab-pane">
 
-  <!-- Resolution Upload Modal -->
+        <!-- Staff PIN -->
+        <div class="card settings-section">
+          <h3 style="font-size:1.1rem; font-weight:700; color:var(--text-primary); margin-bottom:6px;">Staff PIN Configuration</h3>
+          <p style="color:var(--text-secondary); font-size:0.875rem; line-height:1.6; margin-bottom:20px;">Set a Staff PIN so your employees can redeem rewards on a customer's phone without accessing this dashboard.</p>
+          <form id="settingsForm">
+            <div class="form-group" style="max-width:280px;">
+              <label class="form-label">Staff PIN</label>
+              <input type="text" id="staffPinSet" class="form-control" placeholder="e.g. 1234" maxlength="8">
+            </div>
+            <button type="submit" class="btn btn-primary" style="max-width:200px;">Save Settings</button>
+          </form>
+        </div>
+
+        <!-- Badge Download -->
+        <div class="card settings-section">
+          <h3 style="font-size:1.1rem; font-weight:700; color:var(--text-primary); margin-bottom:6px;">Downloadable Trust Badge</h3>
+          <p style="color:var(--text-secondary); font-size:0.875rem; line-height:1.6; margin-bottom:20px;">Post this on your social media or website to show customers your verified hygiene score.</p>
+          <div style="background:var(--background); padding:28px; border-radius:12px; border:2px dashed var(--border); text-align:center;">
+            <div id="badgeImageContainer" style="margin-bottom:16px;">
+              <!-- Rendered by vendor-dashboard.js -->
+            </div>
+            <p style="font-size:0.8rem; color:var(--text-secondary);">Right-click the image and select <strong>"Save Image As..."</strong> to download.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /main-content -->
+  </div><!-- /dashboard-container -->
+
+  <!-- ===== RESOLUTION MODAL ===== -->
   <div class="modal-overlay" id="resolutionModal">
     <div class="modal-content">
-      <h3>Resolve Ticket</h3>
-      <p>Upload a photo proving the issue is fixed.</p>
-      <input type="file" id="resolutionImageInput" accept="image/*" class="form-control" style="margin-bottom: 16px;">
-      <button class="btn btn-primary" onclick="submitResolution()">Upload & Resolve</button>
-      <button class="btn btn-outline" style="margin-top: 8px;" onclick="closeResolutionModal()">Cancel</button>
+      <div class="modal-handle"></div>
+      <div style="text-align:center; margin-bottom:16px;">
+        <div style="width:44px;height:44px;background:rgba(239,68,68,0.1);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:1.35rem;">📸</div>
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text-primary);">Resolve Ticket</h3>
+        <p style="color:var(--text-secondary); font-size:0.82rem; margin-top:4px;">Upload a clear photo proving the reported issue has been fixed.</p>
+      </div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label class="form-label">Resolution Photo</label>
+        <input type="file" id="resolutionImageInput" accept="image/*" class="form-control">
+      </div>
+      <button class="btn btn-primary" onclick="submitResolution()">
+        Upload &amp; Resolve
+      </button>
+      <button class="btn btn-outline" style="margin-top:8px;" onclick="closeResolutionModal()">Cancel</button>
     </div>
   </div>
 
+  <div id="toast-container"></div>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/vendor-dashboard.js"></script>
+  <script>
+    /* Visual only: feeds the trust-score number into the ring's progress arc. */
+    (function () {
+      var el = document.getElementById('trustScore');
+      if (!el) return;
+      var ring = el.closest('.score-ring');
+      function sync() {
+        var n = parseFloat(el.textContent);
+        if (isNaN(n)) n = 0;
+        ring.style.setProperty('--vd-score', Math.max(0, Math.min(100, n)));
+      }
+      new MutationObserver(sync).observe(el, { childList: true, characterData: true, subtree: true });
+      requestAnimationFrame(function () { requestAnimationFrame(sync); });
+    })();
+  </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
-// Auth guard — verifies token is still valid before loading anything
+// Auth guard — verifies ADMIN token is still valid before loading anything
 (async () => {
-  await requireAuth();
+  await requireAdminAuth();
   loadDashboard();
 })();
 
