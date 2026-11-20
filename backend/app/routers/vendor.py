@@ -14,17 +14,28 @@ def register_vendor(vendor: VendorCreate):
     # 1. Check if profile already exists in our table
     existing = supabase.table("vendors").select("id").eq("email", vendor.email).execute()
     if existing.data:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise HTTPException(status_code=400, detail="This email is already registered. Please log in.")
         
-    # 2. Register user in Supabase Auth
+    # 2. Register user in Supabase Auth via admin (avoids SMTP email rate limits and pre-confirms account)
     try:
-        auth_response = supabase.auth.sign_up({
-            "email": vendor.email,
-            "password": vendor.password
-        })
-        
-        if not auth_response.user:
-            raise HTTPException(status_code=500, detail="Failed to create user in Auth system")
+        try:
+            auth_response = supabase.auth.admin.create_user({
+                "email": vendor.email,
+                "password": vendor.password,
+                "email_confirm": True
+            })
+        except Exception as auth_err:
+            err_str = str(auth_err)
+            if "already registered" in err_str.lower() or "already exists" in err_str.lower():
+                raise HTTPException(status_code=400, detail="This email is already registered in Auth. Please log in.")
+            # Fallback to standard sign_up if admin method is unavailable
+            auth_response = supabase.auth.sign_up({
+                "email": vendor.email,
+                "password": vendor.password
+            })
+            
+        if not auth_response or not auth_response.user:
+            raise HTTPException(status_code=500, detail="Failed to create user in authentication system")
             
         new_user_id = auth_response.user.id
         
@@ -42,15 +53,21 @@ def register_vendor(vendor: VendorCreate):
         
         response = supabase.table("vendors").insert(new_vendor).execute()
         if not response.data:
-            # Cleanup Auth user if profile fails (ideally handled via DB triggers, but doing basic fallback here)
-            # Cannot easily delete auth.users from client without service_role key, so we'll just raise error
+            # Try to clean up auth user if profile insert failed
+            try:
+                supabase.auth.admin.delete_user(new_user_id)
+            except Exception:
+                pass
             raise HTTPException(status_code=500, detail="Failed to create vendor profile")
             
         return {"message": "Registration successful. Awaiting admin approval.", "vendor_id": new_user_id}
     except HTTPException:
         raise
-    except Exception:
-        raise HTTPException(status_code=400, detail="Registration failed. The email may already be registered or the password does not meet the requirements.")
+    except Exception as e:
+        err_detail = str(e)
+        if "already registered" in err_detail.lower():
+            raise HTTPException(status_code=400, detail="This email is already registered.")
+        raise HTTPException(status_code=400, detail=f"Registration failed: {err_detail}")
 
 @router.post("/login")
 def login_vendor(creds: VendorLogin):
