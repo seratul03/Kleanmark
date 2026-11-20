@@ -3,118 +3,401 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KleanMark - Trust is the New Menu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>KleanMark — Trust Is The New Menu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
 
+  <!-- ===== HERO ===== -->
   <header class="hero">
-    <img src="assets/images/Logo.svg" alt="KleanMark Logo" class="brand-logo">
-    <p>Hygiene Trust Verification & Customer Loyalty in one simple scan.</p>
-    <div class="hero-buttons">
-      <button class="btn btn-primary" onclick="openScanner()">Scan a QR Code</button>
-      <button class="btn btn-outline" onclick="window.location.href='vendor-register.html'">Vendor Sign Up</button>
-      <button class="btn btn-outline" onclick="window.location.href='vendor-login.html'">Vendor Login</button>
+    <div class="hero-noise"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <nav class="hero-nav">
+      <img src="assets/images/Logo.svg" alt="KleanMark" class="nav-logo">
+      <div class="nav-links">
+        <a href="vendor-login.html" class="nav-link">Login</a>
+        <a href="vendor-register.html" class="btn btn-primary btn-sm">Get Started</a>
+      </div>
+    </nav>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        India's #1 Hygiene Trust Platform
+      </div>
+
+      <h1 class="hero-title">
+        Trust Is The<br>
+        <span class="gradient-text">New Menu</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Hygiene verification meets customer loyalty — in one powerful QR scan.
+        Real scores. Real trust. Real rewards.
+      </p>
+
+      <div class="hero-buttons">
+        <button class="btn btn-hero-primary" onclick="openScanner()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h3v3h-3z"/><path d="M14 20h3"/><path d="M20 14v3"/></svg>
+          Scan QR Code
+        </button>
+        <a href="vendor-register.html" class="btn btn-hero-outline">Vendor Sign Up</a>
+        <a href="vendor-login.html" class="btn btn-hero-ghost">Vendor Login</a>
+      </div>
+
+      <div class="hero-trust-strip">
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Verified Businesses
+        </div>
+        <div class="trust-sep">•</div>
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Loyalty Rewards
+        </div>
+        <div class="trust-sep">•</div>
+        <div class="trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          Real-Time Scores
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
     </div>
   </header>
 
-  <section class="how-it-works">
-    <h2 class="fade-up">How It Works</h2>
-    <div class="steps">
-      <div class="step fade-up">
-        <div class="step-number">1</div>
-        <div class="step-content">
-          <h3>Restaurants Get Verified</h3>
-          <p>Vendors complete hygiene checklists and upload proof photos to get their KleanMark trust score.</p>
-        </div>
-      </div>
-      <div class="step fade-up">
-        <div class="step-number">2</div>
-        <div class="step-content">
-          <h3>Customers Scan</h3>
-          <p>Diners scan the KleanMark QR code at the table to view the real-time hygiene trust score.</p>
-        </div>
-      </div>
-      <div class="step fade-up">
-        <div class="step-number">3</div>
-        <div class="step-content">
-          <h3>Earn Rewards</h3>
-          <p>Customers check-in securely via OTP to earn loyalty stars for free food and drinks.</p>
-        </div>
-      </div>
+  <!-- ===== STATS STRIP ===== -->
+  <div class="stats-strip">
+    <div class="stat-item reveal">
+      <div class="stat-number" data-target="500" data-suffix="+">500+</div>
+      <div class="stat-label">Verified Vendors</div>
     </div>
-  </section>
-
-  <section class="about-founders">
-    <div class="container">
-      <h2 class="fade-up">Meet the Founders</h2>
-      <div class="founders-grid fade-up">
-        <div class="founder-card">
-          <img src="assets/images/Sayan%20Maity.png" alt="Sayan Maity" class="founder-img">
-          <h3>Sayan Maity</h3>
-          <p>Co-Founder</p>
-        </div>
-        <div class="founder-card">
-          <img src="assets/images/CEO%202.png" alt="Subarna bag" class="founder-img">
-          <h3 id="ceo2-name">Subarna bag</h3>
-          <p>Co-Founder</p>
-        </div>
-      </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item reveal">
+      <div class="stat-number" data-target="50" data-suffix="K+">50K+</div>
+      <div class="stat-label">Customer Scans</div>
     </div>
-  </section>
-
-  <footer class="footer">
-    <p>&copy; 2026 KleanMark. All rights reserved.</p>
-    <p style="margin-top: 8px; font-size: 0.8rem;"><a href="admin-login.html" style="color: #a0aec0; text-decoration: none;">Admin Login</a></p>
-  </footer>
-
-  <!-- QR Scanner Modal (Mock for MVP) -->
-  <div class="modal-overlay" id="scannerModal">
-    <div class="modal-content">
-      <h3>Scan KleanMark QR</h3>
-      <p>In a real app, this would open the camera. For now, enter a Vendor ID to simulate scanning a QR code.</p>
-      <div class="form-group">
-        <input type="text" id="mockVendorId" class="form-control" placeholder="Enter Vendor ID (UUID)">
-      </div>
-      <button class="btn btn-primary" onclick="simulateScan()">Simulate Scan</button>
-      <button class="btn btn-outline" style="margin-top: 8px;" onclick="closeScanner()">Cancel</button>
+    <div class="stat-divider"></div>
+    <div class="stat-item reveal">
+      <div class="stat-number" data-target="98" data-suffix="%">98%</div>
+      <div class="stat-label">Satisfaction Rate</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item reveal">
+      <div class="stat-number" data-target="12" data-suffix="">12</div>
+      <div class="stat-label">Cities Active</div>
     </div>
   </div>
 
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="how-it-works">
+    <div class="section-inner">
+      <span class="section-label reveal">How It Works</span>
+      <h2 class="section-title reveal">Three Steps to <span class="gradient-text">Complete Trust</span></h2>
+      <p class="section-subtitle reveal">From kitchen to customer — a seamless hygiene verification loop that builds confidence at every table.</p>
+
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-accent"></div>
+          <div class="step-number">01</div>
+          <div class="step-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="step-content">
+            <h3>Restaurants Get Verified</h3>
+            <p>Vendors complete hygiene checklists, upload proof photos, and earn their KleanMark trust score — updated in real time.</p>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-accent"></div>
+          <div class="step-number">02</div>
+          <div class="step-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/></svg>
+          </div>
+          <div class="step-content">
+            <h3>Customers Scan</h3>
+            <p>Diners scan the KleanMark QR at the table to instantly see the hygiene score, proof photos, and checklist in full detail.</p>
+          </div>
+        </div>
+
+        <div class="step reveal">
+          <div class="step-accent"></div>
+          <div class="step-number">03</div>
+          <div class="step-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="step-content">
+            <h3>Earn Rewards</h3>
+            <p>Customers check in via OTP to earn loyalty stars — redeem for free food, drinks, and exclusive perks at every visit.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES BENTO ===== -->
+  <section class="features-section">
+    <div class="section-inner">
+      <span class="section-label reveal">Features</span>
+      <h2 class="section-title reveal">Built for the <span class="gradient-text">Modern F&amp;B Industry</span></h2>
+      <div class="bento-grid">
+        <div class="bento-card bento-large reveal">
+          <div class="bento-icon">🏆</div>
+          <h3>Live Trust Scores</h3>
+          <p>Dynamic scores that update with every hygiene check, photo review, and customer interaction — no gaming, no guessing.</p>
+          <div class="bento-score-demo">
+            <div class="demo-ring">
+              <span class="demo-score">87</span>
+            </div>
+            <div class="demo-label">Excellent Hygiene</div>
+          </div>
+        </div>
+        <div class="bento-card reveal">
+          <div class="bento-icon">📸</div>
+          <h3>Photo Proof System</h3>
+          <p>Admin-reviewed photos of kitchen, storage, and prep areas — visible to every customer who scans.</p>
+        </div>
+        <div class="bento-card reveal">
+          <div class="bento-icon">⭐</div>
+          <h3>Loyalty Engine</h3>
+          <p>OTP-secured check-ins, star accumulation, and reward redemption — all without an app download.</p>
+        </div>
+        <div class="bento-card bento-wide reveal">
+          <div class="bento-icon">📊</div>
+          <h3>Scan Analytics</h3>
+          <p>Know exactly how many customers viewed your profile, checked in, and converted — with daily breakdowns.</p>
+          <div class="analytics-demo">
+            <div class="analytics-bar" style="--h: 60%"></div>
+            <div class="analytics-bar" style="--h: 85%"></div>
+            <div class="analytics-bar" style="--h: 45%"></div>
+            <div class="analytics-bar" style="--h: 72%"></div>
+            <div class="analytics-bar" style="--h: 90%"></div>
+            <div class="analytics-bar" style="--h: 65%"></div>
+            <div class="analytics-bar" style="--h: 78%"></div>
+          </div>
+        </div>
+        <div class="bento-card reveal">
+          <div class="bento-icon">🛡️</div>
+          <h3>Fraud Protection</h3>
+          <p>AI-powered fraud detection flags suspicious check-in patterns before they affect your score.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOUNDERS ===== -->
+  <section class="about-founders" id="founders">
+    <div class="section-inner">
+      <span class="section-label reveal">The Team</span>
+      <h2 class="section-title reveal">Meet the <span class="gradient-text">Founder</span></h2>
+      <p class="section-subtitle reveal">Two builders on a mission to make food safety transparent and rewarding for everyone.</p>
+
+      <div class="founders-grid">
+        <div class="founder-card reveal">
+          <div class="founder-glow"></div>
+          <div class="founder-img-wrap">
+            <img src="assets/images/Sayan%20Maity.png" alt="Sayan Maity" class="founder-img">
+            <div class="founder-ring"></div>
+          </div>
+          <div class="founder-info">
+            <h3>Sayan Maity</h3>
+            <p class="founder-role">Co-Founder &amp; CEO</p>
+            <p class="founder-bio">Visionary behind the KleanMark trust ecosystem, passionate about food safety and consumer empowerment.</p>
+          </div>
+        </div>
+
+        <!-- <div class="founder-card reveal">
+          <div class="founder-glow"></div>
+          <div class="founder-img-wrap">
+            <img src="assets/images/CEO%202.png" alt="Subarna Bag" class="founder-img">
+            <div class="founder-ring"></div>
+          </div>
+          <div class="founder-info">
+            <h3 id="ceo2-name">Subarna Bag</h3>
+            <p class="founder-role">Co-Founder &amp; CTO</p>
+            <p class="founder-bio">The engineering force behind KleanMark's real-time verification platform and loyalty infrastructure.</p>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section">
+    <div class="cta-noise"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="cta-inner reveal">
+      <div class="cta-badge">🚀 Join the Movement</div>
+      <h2>Ready to Build <span class="gradient-text">Customer Trust?</span></h2>
+      <p>Join hundreds of food businesses that display their hygiene score with pride. It's free to get started.</p>
+      <div class="cta-buttons">
+        <a href="vendor-register.html" class="btn btn-cta-primary">Register Your Business</a>
+        <button class="btn btn-cta-outline" onclick="openScanner()">Scan a QR Code</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/images/Logo.svg" alt="KleanMark" class="footer-logo">
+        <p>Making food hygiene visible,<br>and loyalty rewarding.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a href="vendor-register.html">Register Business</a>
+          <a href="vendor-login.html">Vendor Login</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#founders">About Us</a>
+          <a href="admin-login.html" class="footer-admin-link">Admin Portal</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 KleanMark. All rights reserved.</p>
+      <p>Built with ❤️ for safe food in India</p>
+    </div>
+  </footer>
+
+  <!-- ===== QR SCANNER MODAL ===== -->
+  <div class="modal-overlay" id="scannerModal" role="dialog" aria-modal="true" aria-labelledby="scannerTitle" aria-hidden="true" tabindex="-1">
+    <div class="modal-content">
+      <div class="modal-handle"></div>
+      <div class="modal-scanner-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h3v3h-3z"/><path d="M14 20h3"/><path d="M20 14v3"/></svg>
+      </div>
+      <h3 id="scannerTitle">Scan KleanMark QR</h3>
+      <p>In a live deployment, this opens your camera. For now, enter a Vendor ID to simulate scanning.</p>
+      <div class="form-group">
+        <label class="form-label">Vendor ID (UUID)</label>
+        <input type="text" id="mockVendorId" class="form-control" placeholder="e.g. 3fa85f64-5717-4562-b3fc-2c963f66afa6" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="36" aria-describedby="vendorIdHelp">
+        <small id="vendorIdHelp">Enter a valid vendor UUID.</small>
+      </div>
+      <button class="btn btn-primary" onclick="simulateScan()">Simulate Scan</button>
+      <button class="btn btn-outline" style="margin-top: 10px;" onclick="closeScanner()">Cancel</button>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/api.js"></script>
   <script>
+    const scannerModal = document.getElementById('scannerModal');
+    const vendorIdInput = document.getElementById('mockVendorId');
+    let previouslyFocusedElement = null;
+
     function openScanner() {
-      document.getElementById('scannerModal').classList.add('active');
+      previouslyFocusedElement = document.activeElement;
+      scannerModal.classList.add('active');
+      scannerModal.setAttribute('aria-hidden', 'false');
+      vendorIdInput.focus();
     }
-    
+
     function closeScanner() {
-      document.getElementById('scannerModal').classList.remove('active');
+      scannerModal.classList.remove('active');
+      scannerModal.setAttribute('aria-hidden', 'true');
+      if (previouslyFocusedElement && typeof previouslyFocusedElement.focus === 'function') {
+        previouslyFocusedElement.focus();
+      }
     }
-    
+
     function simulateScan() {
-      const vendorId = document.getElementById('mockVendorId').value.trim();
-      if (!vendorId) {
-        alert("Please enter a Vendor ID");
+      const vendorId = vendorIdInput.value.trim();
+      const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+      if (!uuidPattern.test(vendorId)) {
+        vendorIdInput.setCustomValidity('Enter a valid UUID.');
+        vendorIdInput.reportValidity();
         return;
       }
-      window.location.href = `public-vendor.html?id=${vendorId}`;
+
+      vendorIdInput.setCustomValidity('');
+      window.location.href = `public-vendor.html?id=${encodeURIComponent(vendorId)}`;
     }
 
-    // Scroll Animations
-    document.addEventListener("DOMContentLoaded", function() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, { threshold: 0.1 });
+    vendorIdInput.addEventListener('input', () => vendorIdInput.setCustomValidity(''));
 
-      document.querySelectorAll('.fade-up').forEach((el) => {
-        observer.observe(el);
-      });
+    // Close the scanner when the user clicks the backdrop or presses Escape.
+    scannerModal.addEventListener('click', (event) => {
+      if (event.target === scannerModal) closeScanner();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && scannerModal.classList.contains('active')) {
+        closeScanner();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Scroll reveal
+      if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal, .fade-up').forEach((element) => {
+          revealObserver.observe(element);
+        });
+      } else {
+        document.querySelectorAll('.reveal, .fade-up').forEach((element) => {
+          element.classList.add('visible');
+        });
+      }
+
+      // Animate the statistics once they enter the viewport.
+      const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+      const animateNum = (element) => {
+        const target = Number(element.dataset.target);
+        const suffix = element.dataset.suffix || '';
+        const duration = 1200;
+        const startTime = performance.now();
+
+        if (!Number.isFinite(target) || target < 0) return;
+
+        const tick = (now) => {
+          const progress = Math.min((now - startTime) / duration, 1);
+          const easedProgress = 1 - Math.pow(1 - progress, 3);
+          element.textContent = `${Math.floor(target * easedProgress)}${suffix}`;
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+
+        requestAnimationFrame(tick);
+      };
+
+      if ('IntersectionObserver' in window) {
+        const statsObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              animateNum(entry.target);
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.5 });
+
+        statNumbers.forEach((element) => statsObserver.observe(element));
+      } else {
+        statNumbers.forEach(animateNum);
+      }
     });
   </script>
 </body>

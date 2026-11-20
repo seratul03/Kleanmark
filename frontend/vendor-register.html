@@ -3,63 +3,240 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vendor Registration - KleanMark</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Register Your Business — KleanMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <link rel="stylesheet" href="css/global.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+    }
+
+    .register-page {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    /* ---- Left Visual ---- */
+    .register-visual {
+      background: var(--gradient-dark);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px;
+    }
+    .reg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+    }
+    .reg-orb-1 { width: 350px; height: 350px; background: rgba(0,200,83,0.3); top: -100px; right: -80px; }
+    .reg-orb-2 { width: 250px; height: 250px; background: rgba(105,240,174,0.15); bottom: 80px; left: -60px; }
+    .reg-orb-3 { width: 180px; height: 180px; background: rgba(0,123,51,0.4); top: 50%; left: 30%; transform: translate(-50%,-50%); animation: orbFloat 8s ease-in-out infinite; }
+    @keyframes orbFloat { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-55%) scale(1.08)} }
+
+    .reg-logo { height: 40px; position: relative; z-index: 1; }
+    .reg-visual-content { position: relative; z-index: 1; }
+    .reg-visual-content h2 {
+      font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .reg-visual-content h2 span {
+      background: linear-gradient(135deg, #69F0AE, #00C853);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .reg-visual-content p {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin-bottom: 36px;
+    }
+    .steps-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .step-prev {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.875rem;
+    }
+    .step-prev-num {
+      width: 32px; height: 32px;
+      background: rgba(0,200,83,0.25);
+      border: 1px solid rgba(0,200,83,0.4);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      color: #69F0AE;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    /* ---- Right Form ---- */
+    .register-form-side {
+      background: #fff;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 40px;
+      overflow-y: auto;
+    }
+    .register-card {
+      width: 100%;
+      max-width: 500px;
+    }
+    .reg-mobile-logo { display: none; height: 36px; margin-bottom: 28px; }
+    .reg-form-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .reg-form-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .password-hint {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .reg-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      padding-bottom: 16px;
+    }
+    .reg-footer a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .reg-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 900px) {
+      .register-page { grid-template-columns: 1fr; }
+      .register-visual { display: none; }
+      .reg-mobile-logo { display: block; }
+      .register-form-side { padding: 40px 24px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <div class="container" style="padding-top: 48px;">
-    <div class="card">
-      <h2 style="text-align: center; margin-bottom: 24px; color: var(--primary);">Join KleanMark</h2>
-      
-      <form id="registerForm">
-        <div class="form-group">
-          <label class="form-label">Business Name</label>
-          <input type="text" id="businessName" class="form-control" required>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Owner Name</label>
-          <input type="text" id="ownerName" class="form-control" required>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input type="email" id="email" class="form-control" placeholder="vendor@example.com" required>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Business Category</label>
-          <select id="category" class="form-control" required>
-            <option value="">Select Category...</option>
-            <option value="Restaurant">Restaurant</option>
-            <option value="Cafe">Cafe / Coffee Shop</option>
-            <option value="Bakery">Bakery / Sweet Shop</option>
-            <option value="Street Food">Street Food</option>
-            <option value="Cloud Kitchen">Cloud Kitchen</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
+  <div class="register-page">
 
-        <div class="form-group">
-          <label class="form-label">Address</label>
-          <textarea id="address" class="form-control" rows="3" required></textarea>
+    <!-- Left Visual -->
+    <div class="register-visual">
+      <div class="reg-orb reg-orb-1"></div>
+      <div class="reg-orb reg-orb-2"></div>
+      <div class="reg-orb reg-orb-3"></div>
+      <img src="assets/images/Logo.svg" alt="KleanMark" class="reg-logo">
+      <div class="reg-visual-content">
+        <h2>Join India's<br><span>Hygiene Network</span></h2>
+        <p>Register your food business today and start building verifiable trust with every customer who walks through your door.</p>
+        <div class="steps-preview">
+          <div class="step-prev">
+            <div class="step-prev-num">1</div>
+            <span>Fill in your business details below</span>
+          </div>
+          <div class="step-prev">
+            <div class="step-prev-num">2</div>
+            <span>Admin reviews and approves your application</span>
+          </div>
+          <div class="step-prev">
+            <div class="step-prev-num">3</div>
+            <span>Go live with your trust score and QR code</span>
+          </div>
         </div>
-        
-        <div class="form-group" style="margin-bottom: 32px;">
-          <label class="form-label">Password</label>
-          <input type="password" id="password" class="form-control" required minlength="6" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,}" title="Must contain at least one number, one uppercase and lowercase letter, and one special character, and at least 6 or more characters">
-        </div>
-        
-        <button type="submit" class="btn btn-primary" id="submitBtn">Register Business</button>
-      </form>
-      
-      <p style="text-align: center; margin-top: 24px; font-size: 0.875rem;">
-        Already registered? <a href="vendor-login.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Log In</a>
-      </p>
+      </div>
     </div>
+
+    <!-- Right Form -->
+    <div class="register-form-side">
+      <div class="register-card">
+        <img src="assets/images/Logo.svg" alt="KleanMark" class="reg-mobile-logo">
+
+        <h2 class="reg-form-title">Create Account</h2>
+        <p class="reg-form-subtitle">Get your business KleanMark-verified — it only takes a minute.</p>
+
+        <form id="registerForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Business Name</label>
+              <input type="text" id="businessName" class="form-control" placeholder="e.g. Spice Garden" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Owner Name</label>
+              <input type="text" id="ownerName" class="form-control" placeholder="Your full name" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="email" class="form-control" placeholder="owner@restaurant.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Business Category</label>
+            <select id="category" class="form-control" required>
+              <option value="">Select a category...</option>
+              <option value="Restaurant">🍽️ Restaurant</option>
+              <option value="Cafe">☕ Cafe / Coffee Shop</option>
+              <option value="Bakery">🥐 Bakery / Sweet Shop</option>
+              <option value="Street Food">🌮 Street Food</option>
+              <option value="Cloud Kitchen">📦 Cloud Kitchen</option>
+              <option value="Other">🏪 Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Business Address</label>
+            <textarea id="address" class="form-control" rows="3" placeholder="Full address including city, state..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required minlength="6">
+            <div class="password-hint">Minimum 6 characters (can include letters, numbers, and symbols).</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="submitBtn" style="margin-top: 8px;">
+            Register My Business
+          </button>
+        </form>
+
+        <div class="reg-footer">
+          Already registered? <a href="vendor-login.html">Sign in here</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 
+  <div id="toast-container"></div>
   <script src="js/api.js"></script>
   <script src="js/vendor-register.js"></script>
 </body>

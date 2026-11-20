@@ -3,32 +3,164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Subscription - KleanMark</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Manage Subscription — KleanMark</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
   <link rel="stylesheet" href="css/global.css">
   <style>
-    body { padding: 40px; background: #f9fafb; }
-    .plans-container { display: flex; gap: 24px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
-    .plan-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 32px; width: 300px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-    .plan-price { font-size: 2.5rem; font-weight: 700; color: var(--primary); margin: 16px 0; }
-    .plan-desc { text-align: left; margin: 24px 0; color: var(--text-secondary); line-height: 1.8; }
-    .plan-desc p { margin: 8px 0; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--background);
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ---- Sub-nav ---- */
+    .sub-nav {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .sub-nav-logo { height: 28px; }
+    .sub-nav-sep { color: var(--border); font-size: 1.2rem; margin: 0 4px; }
+    .sub-nav-title { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+    .sub-nav-back {
+      margin-left: auto;
+      display: flex; align-items: center; gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .sub-nav-back:hover { color: var(--primary); }
+
+    /* ---- Hero ---- */
+    .sub-hero {
+      background: var(--gradient-dark);
+      padding: 60px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .sub-hero-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
+    }
+    .sub-hero-orb-1 { width:300px;height:300px; background:rgba(0,200,83,0.25); top:-80px; right:-60px; }
+    .sub-hero-orb-2 { width:200px;height:200px; background:rgba(105,240,174,0.15); bottom:0; left:-40px; }
+    .sub-hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,200,83,0.15);
+      border: 1px solid rgba(0,200,83,0.3);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      color: #69F0AE;
+      font-weight: 600;
+      margin-bottom: 20px;
+      position: relative; z-index: 1;
+    }
+    .sub-hero h1 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+      position: relative; z-index: 1;
+    }
+    .sub-hero h1 span {
+      background: linear-gradient(135deg, #69F0AE, #00C853);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .sub-hero p {
+      color: rgba(255,255,255,0.65);
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.65;
+      position: relative; z-index: 1;
+    }
+
+    /* ---- Plans Container ---- */
+    .plans-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 32px 80px;
+    }
+    .plans-loading {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      padding: 48px;
+    }
+    .plans-loading::before {
+      content: '';
+      display: block;
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Plans are rendered by JS into #plansContainer.
+       The JS creates .plan-card divs — global.css should style them,
+       or vendor-subscription.js inlines styles. */
+    #plansContainer {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 600px) {
+      .sub-nav { padding: 0 16px; }
+      .plans-wrap { padding: 36px 16px 60px; }
+    }
   </style>
 </head>
 <body>
-  <div style="max-width: 1000px; margin: 0 auto;">
-    <button class="btn btn-outline" style="width: auto;" onclick="window.location.href='vendor-dashboard.html'">← Back to Dashboard</button>
-    
-    <div style="text-align: center; margin-top: 40px;">
-      <h1 style="color: var(--text-primary);">Choose Your Subscription Plan</h1>
-      <p style="color: var(--text-secondary); margin-top: 12px;">Maintain your verified status and access premium tools.</p>
-    </div>
 
-    <div class="plans-container" id="plansContainer">
-      <p>Loading plans from the server...</p>
+  <!-- Sub-nav -->
+  <div class="sub-nav">
+    <img src="assets/images/Logo.svg" alt="KleanMark" class="sub-nav-logo">
+    <span class="sub-nav-sep">/</span>
+    <span class="sub-nav-title">Manage Subscription</span>
+    <a href="vendor-dashboard.html" class="sub-nav-back">
+      ← Back to Dashboard
+    </a>
+  </div>
+
+  <!-- Hero -->
+  <div class="sub-hero">
+    <div class="sub-hero-orb sub-hero-orb-1"></div>
+    <div class="sub-hero-orb sub-hero-orb-2"></div>
+    <div class="sub-hero-badge">
+      <span style="width:7px;height:7px;background:#69F0AE;border-radius:50%;animation:pulseGreen 2s infinite;"></span>
+      Subscription Plans
+    </div>
+    <h1>Keep Your Business <span>Verified</span></h1>
+    <p>Maintain your KleanMark verified status and unlock premium tools to grow customer trust and loyalty.</p>
+  </div>
+
+  <!-- Plans -->
+  <div class="plans-wrap">
+    <div id="plansContainer">
+      <div class="plans-loading">Loading plans from server...</div>
     </div>
   </div>
 
+  <div id="toast-container"></div>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/vendor-subscription.js"></script>
